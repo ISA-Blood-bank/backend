@@ -1,8 +1,11 @@
 package com.bloodbank.BloodBank.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
-
+@Entity
 public class Address implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String street;
     private String number;
