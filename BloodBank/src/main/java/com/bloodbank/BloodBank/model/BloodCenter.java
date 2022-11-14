@@ -5,6 +5,7 @@ import java.io.Serializable;
 @Entity
 public class BloodCenter implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
