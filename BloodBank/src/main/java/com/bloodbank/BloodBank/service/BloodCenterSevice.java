@@ -13,6 +13,9 @@ public class BloodCenterSevice {
     @Autowired
     private BloodCenterRepository bloodCenterRepository;
 
+    public BloodCenterSevice(BloodCenterRepository bloodCenterRepository){
+        this.bloodCenterRepository = bloodCenterRepository;
+    }
     public List<BloodCenter> findAll(){
         return bloodCenterRepository.findAll();
     }
