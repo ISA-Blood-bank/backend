@@ -5,3 +5,4 @@ insert into registred_user (name, surname, jmbg, gender, email, password, addres
 insert into blood_center (name, address_id, description, average_score) values ('Red cross', 1, 'good', 0);
 insert into blood_center (name, address_id, description, average_score) values ('Blue cross', 1, 'nice', 0);
 commit;
+
