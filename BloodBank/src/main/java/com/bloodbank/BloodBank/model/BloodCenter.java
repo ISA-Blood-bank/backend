@@ -2,6 +2,11 @@ package com.bloodbank.BloodBank.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 public class BloodCenter implements Serializable {
     @Id
@@ -13,6 +18,9 @@ public class BloodCenter implements Serializable {
     private Address address;
     private String description;
     private float averageScore;
+
+    @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<MedicalStaff> medicalStaff = new HashSet<MedicalStaff>();
 
     public BloodCenter() {
     }

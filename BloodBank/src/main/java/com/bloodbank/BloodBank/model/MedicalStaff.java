@@ -2,7 +2,11 @@ package com.bloodbank.BloodBank.model;
 
 import com.bloodbank.BloodBank.model.enums.Gender;
 
+import javax.persistence.*;
+@Entity
 public class MedicalStaff{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String surname;
@@ -10,7 +14,11 @@ public class MedicalStaff{
     private Gender gender;
     private String email;
     private String password;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "address_id")
     private Address address;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "blood_center_id")
     private BloodCenter bloodCenter;
 
     public MedicalStaff() {
