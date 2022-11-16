@@ -28,7 +28,7 @@ public class RegisteredUserController {
     @PostMapping("/add")
     public ResponseEntity<RegistredUser> addRegisteredUser(@RequestBody RegistredUser user) {
         RegistredUser newUser = regUserService.addRegisteredUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
     @PutMapping("/update")
     public ResponseEntity<RegistredUser> updateRegisteredUser(@RequestBody RegistredUser user) {
