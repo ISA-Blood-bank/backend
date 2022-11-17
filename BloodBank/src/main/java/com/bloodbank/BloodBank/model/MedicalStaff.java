@@ -16,7 +16,7 @@ public class MedicalStaff{
     private String password;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
-    private Address address;
+    private  Address address;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "blood_center_id")
     private BloodCenter bloodCenter;
