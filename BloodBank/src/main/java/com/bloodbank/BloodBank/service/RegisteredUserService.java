@@ -1,7 +1,9 @@
 package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.Address;
+import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
 import com.bloodbank.BloodBank.model.enums.Category;
 import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.RegisteredUserRepository;
@@ -19,6 +21,8 @@ public class RegisteredUserService {
     @Autowired
     private AddressRepository addressRepository;
 
+    Address identical= new Address();
+
     public RegistredUser findOne(Integer id){
         return regUserRep.findById(id).orElseGet(null);
     }
@@ -28,9 +32,19 @@ public class RegisteredUserService {
     public RegistredUser updateRegisteredUser(RegistredUser registredUser){
         return regUserRep.save(registredUser);
     }
-    public RegistredUser addRegisteredUser(RegistredUser registredUser){
-        Address addresWithId = addressRepository.save(registredUser.getAddress());
-        registredUser.setAddress(addresWithId);
+    public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
+        if(jmbgOrEmailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
+            return null;
+        }
+        RegistredUser registredUser = new RegistredUser(registredUserDto.getId(), registredUserDto.getName(), registredUserDto.getSurname(),
+                registredUserDto.getJmbg(), registredUserDto.getGender(), registredUserDto.getEmail(), registredUserDto.getPassword1(), registredUserDto.getAddress(),
+                registredUserDto.getOccupation(),registredUserDto.getJobOrSchoolInfo(), registredUserDto.getPoints(), registredUserDto.getCategory(), registredUserDto.getPenalties(), registredUserDto.getPhone());
+        if(addressExists(registredUser)){
+            registredUser.setAddress(identical);
+        }else{
+            Address addresWithId = addressRepository.save(registredUser.getAddress());
+            registredUser.setAddress(addresWithId);
+        }
         registredUser.setCategory(Category.REGULAR);
         registredUser.setPoints((float)0.0);
         registredUser.setPenalties(0);
@@ -40,5 +54,35 @@ public class RegisteredUserService {
         regUserRep.deleteById(id);
     }
 
+    private boolean addressExists(RegistredUser ru){
+        boolean found=false;
+        for(Address a :  addressRepository.findAll())
+        {
+            if(a.getCity().equals(ru.getAddress().getCity()) && a.getCountry().equals(ru.getAddress().getCountry()) &&
+                    a.getNumber().equals(ru.getAddress().getNumber())&& a.getStreet().equals(ru.getAddress().getStreet()))
+            {
+                identical=a;
+                found=true;
+                return found;
 
+            }
+        }
+        return found;
+    }
+
+    private boolean jmbgOrEmailNotUnique(RegistredUserDto registredUser){
+        for(RegistredUser ru: regUserRep.findAll()){
+            if(ru.getEmail().equals(registredUser.getEmail()) || ru.getJmbg().equals(registredUser.getJmbg())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean incorrectPassword(RegistredUserDto registredUserDto){
+        if(!registredUserDto.getPassword1().equals(registredUserDto.getPassword2())){
+            return true;
+        }
+        return false;
+    }
 }
