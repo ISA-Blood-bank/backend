@@ -3,6 +3,7 @@ package com.bloodbank.BloodBank.model;
 import com.bloodbank.BloodBank.model.enums.Gender;
 
 public class Admin {
+
     private int id;
     private String name;
     private String surname;

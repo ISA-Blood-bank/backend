@@ -1,15 +1,13 @@
 package com.bloodbank.BloodBank.controller;
 
 import com.bloodbank.BloodBank.model.BloodCenter;
+import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.dto.BloodCenterDto;
 import com.bloodbank.BloodBank.service.BloodCenterSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,5 +34,10 @@ public class BloodCenterController {
         }
 
         return new ResponseEntity<>(bloodCenters, HttpStatus.OK);
+    }
+    @PostMapping("/add")
+    public ResponseEntity<BloodCenter> addBloodCenter(@RequestBody BloodCenter bc) {
+        BloodCenter bcnew = bloodCenterSevice.addBloodCenter(bc);
+        return new ResponseEntity<>(bcnew, HttpStatus.CREATED);
     }
 }
