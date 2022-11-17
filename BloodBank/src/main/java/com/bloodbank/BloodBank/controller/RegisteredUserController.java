@@ -1,6 +1,7 @@
 package com.bloodbank.BloodBank.controller;
 
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
 import com.bloodbank.BloodBank.service.RegisteredUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,12 @@ public class RegisteredUserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
     @PostMapping("/add")
-    public ResponseEntity<RegistredUser> addRegisteredUser(@RequestBody RegistredUser user) {
+    public ResponseEntity<RegistredUser> addRegisteredUser(@RequestBody RegistredUserDto user) {
         RegistredUser newUser = regUserService.addRegisteredUser(user);
+        if(newUser == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        RegistredUserDto dto = new RegistredUserDto(newUser);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
     @PutMapping("/update")
