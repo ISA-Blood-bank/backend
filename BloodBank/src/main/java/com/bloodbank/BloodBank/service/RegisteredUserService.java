@@ -1,6 +1,7 @@
 package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.Address;
+import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
@@ -30,6 +31,25 @@ public class RegisteredUserService {
         return regUserRep.findAll();
     }
     public RegistredUser updateRegisteredUser(RegistredUser registredUser){
+        Address newAddress = registredUser.getAddress();
+        boolean found = false;
+        for(Address a : addressRepository.findAll()){
+            if(a.getCity().equals(newAddress.getCity()) && a.getCountry().equals(newAddress.getCountry()) &&
+                    a.getNumber().equals(newAddress.getNumber())&& a.getStreet().equals(newAddress.getStreet())){
+                found = true;
+                newAddress = a;
+                break;
+            }
+        }
+
+        if(found){
+            registredUser.setAddress(newAddress);
+        }
+        else{
+            newAddress.setId(-1);
+            Address address =addressRepository.save(newAddress);
+            registredUser.setAddress(address);
+        }
         return regUserRep.save(registredUser);
     }
     public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
