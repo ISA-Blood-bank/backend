@@ -19,8 +19,7 @@ public class BloodCenter implements Serializable {
     private String description;
     private float averageScore;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<MedicalStaff> medicalStaff = new HashSet<MedicalStaff>();
+
 
     @Override
     public String toString() {
@@ -30,18 +29,19 @@ public class BloodCenter implements Serializable {
                 ", address=" + address +
                 ", description='" + description + '\'' +
                 ", averageScore=" + averageScore +
-                ", medicalStaff=" + medicalStaff +
+
                 '}';
     }
 
-    public BloodCenter(int id, String name, Address address, String description, float averageScore, Set<MedicalStaff> medicalStaff) {
+    public BloodCenter(int id, String name, Address address, String description, float averageScore) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
         this.averageScore = averageScore;
-        this.medicalStaff = medicalStaff;
     }
+
+
 
 
     public int getId() {
@@ -84,13 +84,6 @@ public class BloodCenter implements Serializable {
         this.averageScore = averageScore;
     }
 
-    public Set<MedicalStaff> getMedicalStaff() {
-        return medicalStaff;
-    }
-
-    public void setMedicalStaff(Set<MedicalStaff> medicalStaff) {
-        this.medicalStaff = medicalStaff;
-    }
 
     public BloodCenter() {
     }

@@ -63,11 +63,7 @@ public class MedicalStaffService {
             Address address =addressRepository.save(ms.getAddress());
             ms.setAddress(address);
         }
-        BloodCenter bc=ms.getBloodCenter();
-        Set<MedicalStaff> medicalStaffSet=bc.getMedicalStaff();
-        medicalStaffSet.add(ms);
-        bc.setMedicalStaff(medicalStaffSet);
-        bloodCenterRepository.save(bc);
+
         ms.setPassword("1111");
         if(existsMedicalStaff(ms)==false)
         {
