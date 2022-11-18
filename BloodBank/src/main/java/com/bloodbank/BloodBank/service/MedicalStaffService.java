@@ -63,6 +63,7 @@ public class MedicalStaffService {
             Address address =addressRepository.save(ms.getAddress());
             ms.setAddress(address);
         }
+
         ms.setPassword("1111");
         if(existsMedicalStaff(ms)==false)
         {

@@ -40,6 +40,8 @@ public class BloodCenter implements Serializable {
     }
 
 
+
+
     public int getId() {
         return id;
     }
