@@ -20,6 +20,7 @@ public class BloodCenter implements Serializable {
     private float averageScore;
 
 
+
     @Override
     public String toString() {
         return "BloodCenter{" +
