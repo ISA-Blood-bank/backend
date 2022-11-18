@@ -30,9 +30,11 @@ public class RegistredUser{
 
     private int penalties;
 
+    private String phone;
+
     public RegistredUser() {}
 
-    public RegistredUser(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, String occupation, String jobOrSchoolInfo, float points, Category category, int penalties) {
+    public RegistredUser(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, String occupation, String jobOrSchoolInfo, float points, Category category, int penalties, String phone) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -46,6 +48,7 @@ public class RegistredUser{
         this.points = points;
         this.category = category;
         this.penalties = penalties;
+        this.phone = phone;
     }
 
     public int getId() {
@@ -152,6 +155,14 @@ public class RegistredUser{
         this.penalties = penalties;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
         return "RegistredUser{" +
@@ -168,6 +179,7 @@ public class RegistredUser{
                 ", points=" + points +
                 ", category=" + category +
                 ", penalties=" + penalties +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }

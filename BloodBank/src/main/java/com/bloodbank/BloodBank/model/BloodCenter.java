@@ -19,8 +19,7 @@ public class BloodCenter implements Serializable {
     private String description;
     private float averageScore;
 
-
-
+<
     @Override
     public String toString() {
         return "BloodCenter{" +
@@ -29,7 +28,6 @@ public class BloodCenter implements Serializable {
                 ", address=" + address +
                 ", description='" + description + '\'' +
                 ", averageScore=" + averageScore +
-
                 '}';
     }
 
@@ -87,4 +85,5 @@ public class BloodCenter implements Serializable {
 
     public BloodCenter() {
     }
+
 }
