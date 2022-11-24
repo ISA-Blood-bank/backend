@@ -105,4 +105,10 @@ public class RegisteredUserService {
         }
         return false;
     }
+
+    public List<RegistredUser> search(String searchInput){
+        String[] inputs = searchInput.split(" ");
+        List<RegistredUser> list = regUserRep.search(inputs[0], inputs[1]);
+        return list;
+    }
 }
