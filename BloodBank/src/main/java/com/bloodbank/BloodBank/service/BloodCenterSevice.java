@@ -3,6 +3,7 @@ package com.bloodbank.BloodBank.service;
 import com.bloodbank.BloodBank.model.Address;
 import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.MedicalStaff;
+import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.BloodCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import static java.lang.Float.parseFloat;
 
 @Service
 public class BloodCenterSevice {
@@ -84,7 +88,15 @@ public class BloodCenterSevice {
 
         return bloodCenterRepository.findByAverageScoreLike(pageable);
     }
-
+    public List<BloodCenter> search(String searchInput){
+        List<BloodCenter> list = bloodCenterRepository.search(searchInput);
+        return list;
+    }
+    public List<BloodCenter> filter(String input, String input2){
+        System.out.println("ovde je s"+input+"i"+input2);
+        List<BloodCenter> list = bloodCenterRepository.filter( parseFloat(input),parseFloat(input2));
+        return list;
+    }
     private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
         List<Sort.Order> sorts = new ArrayList<>();
         Sort.Direction direction;

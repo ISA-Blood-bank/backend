@@ -15,5 +15,11 @@ public interface BloodCenterRepository extends JpaRepository<BloodCenter, Intege
 
     @Query("select b from BloodCenter b where b.averageScore > 0 and b.averageScore < 10 ")
     public List<BloodCenter> findByAverageScoreLike(PageRequest pageable);
+    @Query("select r from BloodCenter r where upper(r.name) = upper(?1) or upper(r.address.city) = upper(?1)")
+    public List<BloodCenter> search(String input);
+    @Query("select b from BloodCenter b where b.averageScore between ?1 and ?2")
+    public List<BloodCenter> filter(Float input,Float input2);
+
+
 
 }
