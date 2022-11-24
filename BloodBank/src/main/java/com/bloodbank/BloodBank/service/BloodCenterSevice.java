@@ -6,8 +6,13 @@ import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.BloodCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -67,5 +72,30 @@ public class BloodCenterSevice {
             return bloodCenterRepository.save(bc);
         }
         return null;
+    }
+
+    public List<BloodCenter> findAllSortedAndFiltered(int page, int size, String sortList, String order){
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, sortList));
+        if(order.equals("ASC")){
+            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, sortList));
+        }else {
+            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortList));
+        }
+
+        return bloodCenterRepository.findByAverageScoreLike(pageable);
+    }
+
+    private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        Sort.Direction direction;
+        for (String sort : sortList) {
+            if (sortDirection != null) {
+                direction = Sort.Direction.fromString(sortDirection);
+            } else {
+                direction = Sort.Direction.DESC;
+            }
+            sorts.add(new Sort.Order(direction, sort));
+        }
+        return sorts;
     }
 }
