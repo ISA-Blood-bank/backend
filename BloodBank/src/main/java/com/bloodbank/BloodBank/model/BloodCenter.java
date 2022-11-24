@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "BloodCenter")
 public class BloodCenter implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +18,8 @@ public class BloodCenter implements Serializable {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
     private String description;
+
+    @Column(name = "averageScore")
     private float averageScore;
 
 

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -42,5 +43,9 @@ public class RegisteredUserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
+    @GetMapping("/searchRegisteredUser/{searchInput}")
+    public ResponseEntity<List<RegistredUser>> search(@PathVariable String searchInput){
+        List<RegistredUser> list = regUserService.search(searchInput);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
