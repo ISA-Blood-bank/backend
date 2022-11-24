@@ -10,6 +10,7 @@ public class MedicalStaff{
     private int id;
     private String name;
     private String surname;
+    @Column(unique = true, nullable = false)
     private String jmbg;
     private Gender gender;
     private String email;
