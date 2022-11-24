@@ -40,4 +40,17 @@ public class BloodCenterController {
         BloodCenter bcnew = bloodCenterSevice.addBloodCenter(bc);
         return new ResponseEntity<>(bcnew, HttpStatus.CREATED);
     }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<BloodCenter> findOne(@PathVariable("id") Integer id){
+        BloodCenter bc = bloodCenterSevice.findOne(id);
+        return  new ResponseEntity<>(bc, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<BloodCenter> update(@RequestBody BloodCenter bc){
+        BloodCenter newBloodCenter = bloodCenterSevice.update(bc);
+        return new ResponseEntity<BloodCenter>(newBloodCenter, HttpStatus.OK);
+    }
+
 }

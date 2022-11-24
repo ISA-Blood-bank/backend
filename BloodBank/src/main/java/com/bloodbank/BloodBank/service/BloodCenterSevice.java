@@ -68,4 +68,34 @@ public class BloodCenterSevice {
         }
         return null;
     }
+
+    private boolean isSameAddress(Address first, Address second){
+        return first.getCity().equals(second.getCity()) && first.getCountry().equals(second.getCountry()) &&
+                first.getNumber().equals(second.getNumber())&& first.getStreet().equals(second.getStreet());
+    }
+
+    public BloodCenter update(BloodCenter bc){
+        Address newAddress = bc.getAddress();
+        boolean found = false;
+        for(Address a: addressRepository.findAll()){
+            if(isSameAddress(newAddress, a)){
+                found = true;
+                newAddress = a;
+                break;
+            }
+        }
+
+        if (found){
+            bc.setAddress(newAddress);
+        } else {
+            newAddress.setId(-1);
+            Address address = addressRepository.save(newAddress);
+            bc.setAddress(address);
+        }
+            return bloodCenterRepository.save(bc);
+    }
+
+    public BloodCenter findOne(Integer id){
+        return  bloodCenterRepository.findById(id).orElseGet(null);
+    }
 }
