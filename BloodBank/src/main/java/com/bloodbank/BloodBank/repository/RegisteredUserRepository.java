@@ -11,4 +11,6 @@ import java.util.List;
 public interface RegisteredUserRepository extends JpaRepository<RegistredUser, Integer> {
     @Query("select r from RegistredUser r where upper(r.name) = upper(?1) and upper(r.surname) = upper(?2) ")
     public List<RegistredUser> search(String inputName, String inputSurname);
+
+    RegistredUser findByEmail(String email);
 }

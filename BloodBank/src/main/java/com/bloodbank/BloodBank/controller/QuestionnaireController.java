@@ -6,6 +6,7 @@ import com.bloodbank.BloodBank.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class QuestionnaireController {
     private QuestionnaireService questionnaireService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Questionnaire> save(@RequestBody Questionnaire questionnaire){
         Questionnaire newQuestionnaire = questionnaireService.save(questionnaire);
         return new ResponseEntity<>(newQuestionnaire, HttpStatus.OK);
