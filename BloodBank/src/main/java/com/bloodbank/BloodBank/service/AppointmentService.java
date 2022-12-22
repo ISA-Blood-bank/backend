@@ -7,6 +7,8 @@ import com.bloodbank.BloodBank.repository.QuestionnaireRepository;
 import com.bloodbank.BloodBank.repository.ScheduledAppointmentRepository;
 import com.bloodbank.BloodBank.security.auth.TokenBasedAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -90,5 +92,15 @@ public class AppointmentService {
             }
         }
         return lastReport;
+    }
+
+    public List<Appointment> findAllSortedAndAvailable(int page, int size, String sortList, String order){
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, sortList));
+        if(order.equals("ASC")){
+            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, sortList));
+        }else {
+            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortList));
+        }
+        return appointmentRepository.findAllSortedAndAvailable(pageable);
     }
 }

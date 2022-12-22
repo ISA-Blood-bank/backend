@@ -1,6 +1,7 @@
 package com.bloodbank.BloodBank.controller;
 
 import com.bloodbank.BloodBank.model.Appointment;
+import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,17 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(scheduled, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/sorted/{page}/{size}/{sortList}/{order}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Appointment>> findAllSortedAndAvailable(@PathVariable Integer page,
+                                                                      @PathVariable Integer size,
+                                                                      @PathVariable String sortList,
+                                                                      @PathVariable String order
+
+    ){
+        List<Appointment> appointments = appointmentService.findAllSortedAndAvailable(page, size, sortList, order);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 }
