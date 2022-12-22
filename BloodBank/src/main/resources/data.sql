@@ -8,7 +8,7 @@ insert into blood_center (name, address_id, description, average_score) values (
 insert into blood_center (name, address_id, description, average_score) values ('Blue cross', 2, 'nice', 4);
 insert into blood_center (name, address_id, description, average_score) values ('Novi Sad Blood Center', 1, 'really good', 4.4);
 insert into medical_staff (name, surname, jmbg, gender, email, password, address_id, blood_center_id) values ('Marko', 'Markovic', '1243455', 0, 'marko@gmail.com', 'qwdfhihgty',1,1);
-insert into medical_staff (name, surname, jmbg, gender, email, password, address_id, blood_center_id) values ('Pera', 'Peric', '0987654321', 0, 'marko@gmail.com', 'qwdfhihgty',3,1);
+insert into medical_staff (name, surname, jmbg, gender, email, password, address_id, blood_center_id) values ('Pera', 'Peric', '0987654321', 0, 'perko@gmail.com', 'qwdfhihgty',3,1);
 
 commit;
 
