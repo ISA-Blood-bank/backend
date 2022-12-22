@@ -2,17 +2,20 @@ package com.bloodbank.BloodBank.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-@Entity
 
+
+@Entity
 public class ScheduledAppointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "appointment_id")
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "appointment_id", referencedColumnName = "id")
     private Appointment appointment;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "registred_user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+
     private RegistredUser user;
     private boolean passed;
     private boolean canceled;

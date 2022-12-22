@@ -3,8 +3,12 @@ package com.bloodbank.BloodBank.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+
 @Entity
-public class Appointment implements Serializable {
+@Table(name = "Appointment")
+public class Appointment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -16,7 +20,20 @@ public class Appointment implements Serializable {
     private BloodCenter bloodCenter;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "medical_staff_id")
-    private MedicalStaff medicalStaff;
+
+    private RegistredUser medicalStaff;
+
+    public Appointment() {
+    }
+
+    public Appointment(int id, LocalDateTime start, float duration, boolean available, BloodCenter bloodCenter, RegistredUser medicalStaff) {
+        this.id = id;
+        this.start = start;
+        this.duration = duration;
+        this.available = available;
+        this.bloodCenter = bloodCenter;
+        this.medicalStaff = medicalStaff;
+    }
 
     public int getId() {
         return id;
@@ -58,20 +75,11 @@ public class Appointment implements Serializable {
         this.bloodCenter = bloodCenter;
     }
 
-    public MedicalStaff getMedicalStaff() {
+    public RegistredUser getMedicalStaff() {
         return medicalStaff;
     }
 
-    public void setMedicalStaff(MedicalStaff medicalStaff) {
-        this.medicalStaff = medicalStaff;
-    }
-
-    public Appointment(int id, LocalDateTime start, float duration, boolean available, BloodCenter bloodCenter, MedicalStaff medicalStaff) {
-        this.id = id;
-        this.start = start;
-        this.duration = duration;
-        this.available = available;
-        this.bloodCenter = bloodCenter;
+    public void setMedicalStaff(RegistredUser medicalStaff) {
         this.medicalStaff = medicalStaff;
     }
 
@@ -85,9 +93,6 @@ public class Appointment implements Serializable {
                 ", bloodCenter=" + bloodCenter +
                 ", medicalStaff=" + medicalStaff +
                 '}';
-    }
-
-    public Appointment() {
     }
 }
 
