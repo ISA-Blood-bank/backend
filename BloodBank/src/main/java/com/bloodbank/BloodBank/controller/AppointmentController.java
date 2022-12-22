@@ -1,7 +1,9 @@
 package com.bloodbank.BloodBank.controller;
 
 import com.bloodbank.BloodBank.model.Appointment;
+import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.dto.AppointmentDto;
 import com.bloodbank.BloodBank.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,5 +36,10 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(scheduled, HttpStatus.OK);
+    }
+    @PostMapping("/create")
+    public ResponseEntity<Appointment> createNewAppointment(@RequestBody AppointmentDto appointment) {
+        Appointment appointmentNew = appointmentService.createNewAppointment(appointment);
+        return new ResponseEntity<>(appointmentNew, HttpStatus.CREATED);
     }
 }

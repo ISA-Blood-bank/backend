@@ -1,10 +1,8 @@
 package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.*;
-import com.bloodbank.BloodBank.repository.AppointmentReportRepository;
-import com.bloodbank.BloodBank.repository.AppointmentRepository;
-import com.bloodbank.BloodBank.repository.QuestionnaireRepository;
-import com.bloodbank.BloodBank.repository.ScheduledAppointmentRepository;
+import com.bloodbank.BloodBank.model.dto.AppointmentDto;
+import com.bloodbank.BloodBank.repository.*;
 import com.bloodbank.BloodBank.security.auth.TokenBasedAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +27,10 @@ public class AppointmentService {
 
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
+    @Autowired
+    private MedicalStaffRepository medicalStaffRepository;
+    @Autowired
+    private RegisteredUserRepository userRepository;
 
     public List<Appointment> findAll(){
         return appointmentRepository.findAll();
@@ -90,5 +92,13 @@ public class AppointmentService {
             }
         }
         return lastReport;
+    }
+
+    public Appointment createNewAppointment(AppointmentDto appointment){
+        MedicalStaff ms = medicalStaffRepository.getById(appointment.getMedicalStaffId());
+        BloodCenter bc = ms.getBloodCenter();
+        RegistredUser ru = userRepository.getById(appointment.getMedicalStaffId());
+        Appointment appointment1 = new Appointment(-1, appointment.getStart(),appointment.getDuration(),appointment.isAvailable(),bc,ru);
+        return appointmentRepository.save(appointment1);
     }
 }
