@@ -98,7 +98,7 @@ public class AppointmentService {
         MedicalStaff ms = medicalStaffRepository.getById(appointment.getMedicalStaffId());
         BloodCenter bc = ms.getBloodCenter();
         RegistredUser ru = userRepository.getById(appointment.getMedicalStaffId());
-        Appointment appointment1 = new Appointment(-1, appointment.getStart(),appointment.getDuration(),appointment.isAvailable(),bc,ru);
+        Appointment appointment1 = new Appointment(appointment.getId(), appointment.getStart(),appointment.getDuration(),true,bc,ru);
         return appointmentRepository.save(appointment1);
     }
 }

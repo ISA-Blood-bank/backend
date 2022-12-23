@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +85,12 @@ public class BloodCenterController {
         List<BloodCenter> p = bloodCenterSevice.findAllSortedAndFiltered(page, size, sortList, order);
        //List<BloodCenter> list = p.getContent();
         return new ResponseEntity<>(p, HttpStatus.OK);
+    }
+    @GetMapping("/getavailable/{date}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<BloodCenter>> getAvailableBloodCenters(@PathVariable LocalDateTime date){
+        List<BloodCenter> available = bloodCenterSevice.getAvailableBloodCenters(date);
+        return new ResponseEntity<>(available, HttpStatus.OK);
     }
 
 }

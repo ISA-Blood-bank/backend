@@ -11,11 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(value = "api/appointments")
+@RequestMapping("api/appointments")
 public class AppointmentController {
 
     @Autowired
@@ -37,8 +38,11 @@ public class AppointmentController {
         }
         return new ResponseEntity<>(scheduled, HttpStatus.OK);
     }
-    @PostMapping("/create")
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Appointment> createNewAppointment(@RequestBody AppointmentDto appointment) {
+        LocalDateTime time = appointment.getStart().plusHours(1);
+        appointment.setStart(time);
         Appointment appointmentNew = appointmentService.createNewAppointment(appointment);
         return new ResponseEntity<>(appointmentNew, HttpStatus.CREATED);
     }

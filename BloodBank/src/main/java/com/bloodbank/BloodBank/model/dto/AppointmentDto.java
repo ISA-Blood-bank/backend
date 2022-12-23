@@ -4,17 +4,10 @@ import java.time.LocalDateTime;
 
 public class AppointmentDto {
     private int id;
-    private LocalDateTime start;
     private float duration;
-    private boolean available;
+    private LocalDateTime start;
     private int medicalStaffId;
-
-    public AppointmentDto(int id, LocalDateTime start, float duration, boolean available, int medicalStaffId) {
-        this.id = id;
-        this.start = start;
-        this.duration = duration;
-        this.available = available;
-        this.medicalStaffId = medicalStaffId;
+    public AppointmentDto() {
     }
 
     public int getId() {
@@ -25,12 +18,14 @@ public class AppointmentDto {
         this.id = id;
     }
 
-    public LocalDateTime getStart() {
-        return start;
+
+
+    public int getMedicalStaffId() {
+        return medicalStaffId;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
+    public void setMedicalStaffId(int medicalStaffId) {
+        this.medicalStaffId = medicalStaffId;
     }
 
     public float getDuration() {
@@ -41,19 +36,11 @@ public class AppointmentDto {
         this.duration = duration;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-
-    public int getMedicalStaffId() {
-        return medicalStaffId;
-    }
-
-    public void setMedicalStaffId(int medicalStaffId) {
-        this.medicalStaffId = medicalStaffId;
+    public void setStart(LocalDateTime start) {
+        this.start = start;
     }
 }
