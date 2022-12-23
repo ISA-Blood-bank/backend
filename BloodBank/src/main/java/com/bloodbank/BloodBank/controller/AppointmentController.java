@@ -4,6 +4,7 @@ import com.bloodbank.BloodBank.model.Appointment;
 import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.AppointmentDto;
+import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,5 +46,13 @@ public class AppointmentController {
         appointment.setStart(time);
         Appointment appointmentNew = appointmentService.createNewAppointment(appointment);
         return new ResponseEntity<>(appointmentNew, HttpStatus.CREATED);
+    }
+    @PostMapping("/getavailable")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Appointment>> getAvailableAppointments(@RequestBody RecommendDto recommendDto){
+        LocalDateTime time = recommendDto.getStart().plusHours(1);
+        recommendDto.setStart(time);
+        List<Appointment> available = appointmentService.getAvailableAppointments(recommendDto);
+        return new ResponseEntity<>(available, HttpStatus.OK);
     }
 }

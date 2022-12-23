@@ -1,6 +1,7 @@
 package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.*;
+import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.AppointmentRepository;
 import com.bloodbank.BloodBank.repository.BloodCenterRepository;
@@ -144,12 +145,12 @@ public class BloodCenterSevice {
         return sorts;
 
     }
-    public List<BloodCenter> getAvailableBloodCenters(LocalDateTime date){
+    public List<BloodCenter> getAvailableBloodCenters(RecommendDto recommendDto){
         List<BloodCenter> available = new ArrayList<BloodCenter>();
         List<Appointment> appointments = appointmentRepository.findAll();
         for(Appointment appointment : appointments){
             if(appointment.isAvailable()){
-                if(date.isEqual(appointment.getStart())){
+                if(recommendDto.getStart().isEqual(appointment.getStart())){
                     if(!available.contains(appointment.getBloodCenter())){
                         available.add(appointment.getBloodCenter());
                     }

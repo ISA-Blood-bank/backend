@@ -5,6 +5,7 @@ import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.BloodCenterDto;
+import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.service.BloodCenterSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -86,10 +87,12 @@ public class BloodCenterController {
        //List<BloodCenter> list = p.getContent();
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
-    @GetMapping("/getavailable/{date}")
+    @PostMapping("/getavailable")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<BloodCenter>> getAvailableBloodCenters(@PathVariable LocalDateTime date){
-        List<BloodCenter> available = bloodCenterSevice.getAvailableBloodCenters(date);
+    public ResponseEntity<List<BloodCenter>> getAvailableBloodCenters(@RequestBody RecommendDto recommendDto){
+        LocalDateTime time = recommendDto.getStart().plusHours(1);
+        recommendDto.setStart(time);
+        List<BloodCenter> available = bloodCenterSevice.getAvailableBloodCenters(recommendDto);
         return new ResponseEntity<>(available, HttpStatus.OK);
     }
 

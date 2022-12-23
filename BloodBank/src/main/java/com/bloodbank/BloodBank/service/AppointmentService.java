@@ -2,6 +2,7 @@ package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.AppointmentDto;
+import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.repository.*;
 import com.bloodbank.BloodBank.security.auth.TokenBasedAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +101,17 @@ public class AppointmentService {
         RegistredUser ru = userRepository.getById(appointment.getMedicalStaffId());
         Appointment appointment1 = new Appointment(appointment.getId(), appointment.getStart(),appointment.getDuration(),true,bc,ru);
         return appointmentRepository.save(appointment1);
+    }
+    public List<Appointment> getAvailableAppointments(RecommendDto recommendDto){
+        List<Appointment> available = new ArrayList<Appointment>();
+        List<Appointment> appointments = appointmentRepository.findAll();
+        for(Appointment appointment : appointments){
+            if(appointment.isAvailable()){
+                if(recommendDto.getStart().isEqual(appointment.getStart())){
+                    available.add(appointment);
+                }
+            }
+        }
+        return available;
     }
 }
