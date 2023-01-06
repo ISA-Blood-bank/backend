@@ -120,4 +120,8 @@ public class RegisteredUserService {
         List<RegistredUser> list = regUserRep.search(inputs[0], inputs[1]);
         return list;
     }
+
+    public RegistredUser findByEmail(String email){
+       return regUserRep.findByEmail(email);
+    }
 }
