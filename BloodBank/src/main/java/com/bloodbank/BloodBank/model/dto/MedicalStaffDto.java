@@ -1,40 +1,48 @@
-package com.bloodbank.BloodBank.model;
+package com.bloodbank.BloodBank.model.dto;
 
+import com.bloodbank.BloodBank.model.Address;
+import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.enums.Gender;
 
-import javax.persistence.*;
-@Entity
-public class MedicalStaff{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MedicalStaffDto {
     private int id;
     private String name;
     private String surname;
-    @Column(unique = true, nullable = false)
     private String jmbg;
     private Gender gender;
     private String email;
-    private String password;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id")
-    private  Address address;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "blood_center_id")
+    private String password1;
+    private String password2;
+    private Address address;
     private BloodCenter bloodCenter;
 
-    public MedicalStaff() {
-    }
-
-    public MedicalStaff(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, BloodCenter bloodCenter) {
+    public MedicalStaffDto(int id, String name, String surname, String jmbg, Gender gender, String email, String password1, String password2, Address address, BloodCenter bloodCenter) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.jmbg = jmbg;
         this.gender = gender;
         this.email = email;
-        this.password = password;
+        this.password1 = password1;
+        this.password2 = password2;
         this.address = address;
         this.bloodCenter = bloodCenter;
+    }
+
+    @Override
+    public String toString() {
+        return "MedicalStaffDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", jmbg='" + jmbg + '\'' +
+                ", gender=" + gender +
+                ", email='" + email + '\'' +
+                ", password1='" + password1 + '\'' +
+                ", password2='" + password2 + '\'' +
+                ", address=" + address +
+                ", bloodCenter=" + bloodCenter +
+                '}';
     }
 
     public int getId() {
@@ -85,12 +93,20 @@ public class MedicalStaff{
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassword1() {
+        return password1;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword1(String password1) {
+        this.password1 = password1;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
     }
 
     public Address getAddress() {
@@ -107,20 +123,5 @@ public class MedicalStaff{
 
     public void setBloodCenter(BloodCenter bloodCenter) {
         this.bloodCenter = bloodCenter;
-    }
-
-    @Override
-    public String toString() {
-        return "MedicalStaff{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", jmbg='" + jmbg + '\'' +
-                ", gender=" + gender +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", address=" + address +
-                ", bloodCenter=" + bloodCenter +
-                '}';
     }
 }

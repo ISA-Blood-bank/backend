@@ -1,15 +1,16 @@
 package com.bloodbank.BloodBank.service;
 
-import com.bloodbank.BloodBank.model.Address;
-import com.bloodbank.BloodBank.model.MedicalStaff;
-import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
 import com.bloodbank.BloodBank.model.enums.Category;
 import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.RegisteredUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.sql.Timestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,7 +21,11 @@ public class RegisteredUserService {
 
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleService roleService;
     Address identical= new Address();
 
     public RegistredUser findOne(Integer id){
@@ -30,6 +35,25 @@ public class RegisteredUserService {
         return regUserRep.findAll();
     }
     public RegistredUser updateRegisteredUser(RegistredUser registredUser){
+        Address newAddress = registredUser.getAddress();
+        boolean found = false;
+        for(Address a : addressRepository.findAll()){
+            if(a.getCity().equals(newAddress.getCity()) && a.getCountry().equals(newAddress.getCountry()) &&
+                    a.getNumber().equals(newAddress.getNumber())&& a.getStreet().equals(newAddress.getStreet())){
+                found = true;
+                newAddress = a;
+                break;
+            }
+        }
+
+        if(found){
+            registredUser.setAddress(newAddress);
+        }
+        else{
+            newAddress.setId(-1);
+            Address address =addressRepository.save(newAddress);
+            registredUser.setAddress(address);
+        }
         return regUserRep.save(registredUser);
     }
     public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
@@ -37,7 +61,7 @@ public class RegisteredUserService {
             return null;
         }
         RegistredUser registredUser = new RegistredUser(registredUserDto.getId(), registredUserDto.getName(), registredUserDto.getSurname(),
-                registredUserDto.getJmbg(), registredUserDto.getGender(), registredUserDto.getEmail(), registredUserDto.getPassword1(), registredUserDto.getAddress(),
+                registredUserDto.getJmbg(), registredUserDto.getGender(), registredUserDto.getEmail(), passwordEncoder.encode(registredUserDto.getPassword1()), registredUserDto.getAddress(),
                 registredUserDto.getOccupation(),registredUserDto.getJobOrSchoolInfo(), registredUserDto.getPoints(), registredUserDto.getCategory(), registredUserDto.getPenalties(), registredUserDto.getPhone());
         if(addressExists(registredUser)){
             registredUser.setAddress(identical);
@@ -48,6 +72,11 @@ public class RegisteredUserService {
         registredUser.setCategory(Category.REGULAR);
         registredUser.setPoints((float)0.0);
         registredUser.setPenalties(0);
+        registredUser.setEnabled(false);
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        registredUser.setLastPasswordResetDate(now);
+        List<Role> roles = roleService.findByName("ROLE_USER");
+        registredUser.setRoles(roles);
         return regUserRep.save(registredUser);
     }
     public void remove(Integer id){
@@ -84,5 +113,11 @@ public class RegisteredUserService {
             return true;
         }
         return false;
+    }
+
+    public List<RegistredUser> search(String searchInput){
+        String[] inputs = searchInput.split(" ");
+        List<RegistredUser> list = regUserRep.search(inputs[0], inputs[1]);
+        return list;
     }
 }

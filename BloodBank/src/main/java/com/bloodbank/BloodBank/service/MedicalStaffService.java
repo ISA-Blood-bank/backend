@@ -1,18 +1,14 @@
 package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.Address;
-import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.MedicalStaff;
-import com.bloodbank.BloodBank.model.RegistredUser;
-import com.bloodbank.BloodBank.model.enums.Category;
 import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.BloodCenterRepository;
 import com.bloodbank.BloodBank.repository.MedicalStaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class MedicalStaffService {
@@ -63,16 +59,51 @@ public class MedicalStaffService {
             Address address =addressRepository.save(ms.getAddress());
             ms.setAddress(address);
         }
-        BloodCenter bc=ms.getBloodCenter();
-        Set<MedicalStaff> medicalStaffSet=bc.getMedicalStaff();
-        medicalStaffSet.add(ms);
-        bc.setMedicalStaff(medicalStaffSet);
-        bloodCenterRepository.save(bc);
+
         ms.setPassword("1111");
         if(existsMedicalStaff(ms)==false)
         {
             return medialStaffRepository.save(ms);
         }
         return null;
+    }
+
+    public MedicalStaff findById(Integer id){
+        return medialStaffRepository.findById(id).orElseGet(null);
+    }
+
+    public List<MedicalStaff> findAll(){
+        return medialStaffRepository.findAll();
+    }
+
+    private boolean isSameAddress(Address first, Address second){
+       return first.getCity().equals(second.getCity()) && first.getCountry().equals(second.getCountry()) &&
+                first.getNumber().equals(second.getNumber())&& first.getStreet().equals(second.getStreet());
+    }
+
+    public MedicalStaff updateMedicalStaff(MedicalStaff ms){
+        Address newAddress = ms.getAddress();
+        boolean found = false;
+        for(Address a: addressRepository.findAll()){
+            if(isSameAddress(a, newAddress)){
+                found = true;
+                newAddress = a;
+                break;
+            }
+        }
+
+        if(found){
+            ms.setAddress(newAddress);
+        } else {
+            newAddress.setId(-1);
+            Address address = addressRepository.save(newAddress);
+            ms.setAddress(address);
+        }
+
+        return  medialStaffRepository.save(ms);
+    }
+
+    public List<MedicalStaff> findAllByBloodCenterId(Integer id){
+        return  medialStaffRepository.findAllByBloodCenterId(id);
     }
 }

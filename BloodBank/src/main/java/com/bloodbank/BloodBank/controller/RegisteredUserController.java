@@ -6,8 +6,10 @@ import com.bloodbank.BloodBank.service.RegisteredUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,6 +19,7 @@ public class RegisteredUserController {
     @Autowired
     private RegisteredUserService regUserService;
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<RegistredUser>> getAllUsers(){
         List<RegistredUser> users = regUserService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -42,5 +45,9 @@ public class RegisteredUserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
+    @GetMapping("/searchRegisteredUser/{searchInput}")
+    public ResponseEntity<List<RegistredUser>> search(@PathVariable String searchInput){
+        List<RegistredUser> list = regUserService.search(searchInput);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
