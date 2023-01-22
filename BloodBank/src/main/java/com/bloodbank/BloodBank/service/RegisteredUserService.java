@@ -5,6 +5,7 @@ import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
 import com.bloodbank.BloodBank.model.enums.Category;
 import com.bloodbank.BloodBank.registration.ConfirmationToken;
 import com.bloodbank.BloodBank.repository.AddressRepository;
+import com.bloodbank.BloodBank.repository.ConfirmationTokenRepository;
 import com.bloodbank.BloodBank.repository.RegisteredUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +37,9 @@ public class RegisteredUserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ConfirmationTokenRepository confirmationTokenRepository;
     Address identical= new Address();
 
     public RegistredUser findOne(Integer id){
@@ -67,7 +71,7 @@ public class RegisteredUserService {
         return regUserRep.save(registredUser);
     }
     public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
-        if(jmbgOrEmailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
+        if(jmbgNotUnique(registredUserDto) || emailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
             return null;
         }
         RegistredUser registredUser = new RegistredUser(registredUserDto.getId(), registredUserDto.getName(), registredUserDto.getSurname(),
@@ -121,13 +125,31 @@ public class RegisteredUserService {
         return found;
     }
 
-    private boolean jmbgOrEmailNotUnique(RegistredUserDto registredUser){
+    private boolean jmbgNotUnique(RegistredUserDto registredUser){
         for(RegistredUser ru: regUserRep.findAll()){
-            if(ru.getEmail().equals(registredUser.getEmail()) || ru.getJmbg().equals(registredUser.getJmbg())){
+            if(ru.getJmbg().equals(registredUser.getJmbg())){
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean emailNotUnique(RegistredUserDto registredUser){
+        boolean ret = false;
+        for(RegistredUser ru: regUserRep.findAll()){
+            if(ru.getEmail().equals(registredUser.getEmail())){
+                if(!ru.isEnabled()){
+                    if(confirmationTokenRepository.findByUser(ru.getId()).getExpiresAt().isAfter(LocalDateTime.now())) {
+                        ret = true;
+                    }else{
+                        ret = false;
+                    }
+                }else {
+                    ret = true;
+                }
+            }
+        }
+        return ret;
     }
 
     private boolean incorrectPassword(RegistredUserDto registredUserDto){
