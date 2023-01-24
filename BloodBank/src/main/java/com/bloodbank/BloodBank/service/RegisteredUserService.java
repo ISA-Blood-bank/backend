@@ -193,4 +193,8 @@ public class RegisteredUserService {
         regUserRep.save(confirmedUser);
         return "confirmed";
     }
+
+    public RegistredUser save(RegistredUser registredUser){
+        return regUserRep.save(registredUser);
+    }
 }
