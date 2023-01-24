@@ -29,7 +29,7 @@ public class AppointmentController {
 
     @PutMapping("/schedule/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Appointment> scheduleAppointment(@PathVariable("id") Integer id) {
+    public ResponseEntity<Appointment> scheduleAppointment(@PathVariable("id") Integer id){
         Appointment scheduled = appointmentService.scheduleAppointment(id);
         if(scheduled == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

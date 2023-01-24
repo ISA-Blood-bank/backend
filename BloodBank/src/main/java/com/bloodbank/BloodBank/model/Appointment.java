@@ -20,10 +20,22 @@ public class Appointment {
     @JoinColumn(name = "medical_staff_id")
     private RegistredUser medicalStaff;
 
+    @Version
+    private Integer version;
+
     public Appointment() {
     }
 
     public Appointment(int id, LocalDateTime start, float duration, boolean available, BloodCenter bloodCenter, RegistredUser medicalStaff) {
+        this.id = id;
+        this.start = start;
+        this.duration = duration;
+        this.available = available;
+        this.bloodCenter = bloodCenter;
+        this.medicalStaff = medicalStaff;
+    }
+
+    public Appointment(int id, LocalDateTime start, float duration, boolean available, BloodCenter bloodCenter, RegistredUser medicalStaff, Integer version) {
         this.id = id;
         this.start = start;
         this.duration = duration;
@@ -78,5 +90,13 @@ public class Appointment {
 
     public void setMedicalStaff(RegistredUser medicalStaff) {
         this.medicalStaff = medicalStaff;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
