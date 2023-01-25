@@ -24,5 +24,6 @@ insert into appointment (start, duration, available, blood_center_id, medical_st
 
 insert into questionnaire (question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11, question12, question13, question14, question15, question16, question17, question18, question19, question20, question21, question22, question23, question24, question25, question26, date, registred_user_id) values (true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, '2022-10-01 21:58:58.508-07', 1)
 insert into scheduled_appointment (appointment_id, user_id, passed, canceled) values (3, 1, false, false);
+insert into appointment_report (appointment_id, content, can_give_blood) values (1, 'Super', true);
 commit;
 
