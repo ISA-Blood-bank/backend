@@ -12,11 +12,14 @@ insert into blood_center (name, address_id, description, average_score) values (
 insert into medical_staff (name, surname, jmbg, gender, email, password, address_id, blood_center_id) values ('Marko', 'Markovic', '1243455', 0, 'marko@gmail.com', 'qwdfhihgty',1,1);
 insert into medical_staff (name, surname, jmbg, gender, email, password, address_id, blood_center_id) values ('Pera', 'Peric', '0987654321', 0, 'marko@gmail.com', 'qwdfhihgty',3,1);
 INSERT INTO ROLE (name) VALUES ('ROLE_USER');
+INSERT INTO ROLE (name) VALUES ('ROLE_MEDSTAFF');
 INSERT INTO ROLE (name) VALUES ('ROLE_ADMIN');
+INSERT INTO ROLE (name) VALUES ('ROLE_NOTAUTH');
 
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (1, 1); -- user-u dodeljujemo rolu USER
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (2, 1); -- admin-u dodeljujemo rolu USER
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (2, 2);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (3, 3);
 
 insert into appointment (start, duration, available, blood_center_id, medical_staff_id, version) values ('2023-10-01 21:58:58.508-07', 1, true, 1, 2, 0);
 insert into appointment (start, duration, available, blood_center_id, medical_staff_id, version) values ('2023-10-02 21:58:58.508-07', 1, true, 1, 2, 0);
@@ -26,4 +29,3 @@ insert into questionnaire (question1, question2, question3, question4, question5
 insert into scheduled_appointment (appointment_id, user_id, passed, canceled) values (3, 1, false, false);
 insert into appointment_report (appointment_id, content, can_give_blood) values (1, 'Super', true);
 commit;
-

@@ -194,7 +194,11 @@ public class RegisteredUserService {
         return "confirmed";
     }
 
-    public RegistredUser save(RegistredUser registredUser){
+    public RegistredUser save(RegistredUser registredUser) {
         return regUserRep.save(registredUser);
+
+    }
+    public RegistredUser findByEmail(String email){
+       return regUserRep.findByEmail(email);
     }
 }

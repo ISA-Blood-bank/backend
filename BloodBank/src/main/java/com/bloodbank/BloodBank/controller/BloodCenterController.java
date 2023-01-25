@@ -5,6 +5,7 @@ import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.BloodCenterDto;
+import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.service.BloodCenterSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class BloodCenterController {
         this.bloodCenterSevice = bloodCenterSevice;
     }
     @GetMapping(value = "/all")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public ResponseEntity<List<BloodCenter>> findAll(){
 
         List<BloodCenter> bloodCenters = bloodCenterSevice.findAll();
@@ -84,6 +86,14 @@ public class BloodCenterController {
         List<BloodCenter> p = bloodCenterSevice.findAllSortedAndFiltered(page, size, sortList, order);
        //List<BloodCenter> list = p.getContent();
         return new ResponseEntity<>(p, HttpStatus.OK);
+    }
+    @PostMapping("/getavailable")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<BloodCenter>> getAvailableBloodCenters(@RequestBody RecommendDto recommendDto){
+        LocalDateTime time = recommendDto.getStart().plusHours(1);
+        recommendDto.setStart(time);
+        List<BloodCenter> available = bloodCenterSevice.getAvailableBloodCenters(recommendDto);
+        return new ResponseEntity<>(available, HttpStatus.OK);
     }
 
 }
