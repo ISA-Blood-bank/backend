@@ -48,6 +48,18 @@ public class RegistredUser implements UserDetails {
 
     public RegistredUser() {}
 
+
+
+
+
+
+
+
+
+
+
+
+
     public RegistredUser(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, String occupation, String jobOrSchoolInfo, float points, Category category, int penalties, String phone) {
         this.id = id;
         this.name = name;
@@ -125,6 +137,10 @@ public class RegistredUser implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
     }
 
     @Override

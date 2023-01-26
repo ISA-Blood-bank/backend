@@ -19,10 +19,16 @@ public class RegisteredUserController {
     @Autowired
     private RegisteredUserService regUserService;
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MEDSTAFF')")
     public ResponseEntity<List<RegistredUser>> getAllUsers(){
         List<RegistredUser> users = regUserService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+    @GetMapping("/findByEmail/{email}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<RegistredUser> getUserByEmail(@PathVariable("email") String email){
+       RegistredUser user = regUserService.findByEmail(email);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/find/{id}")
