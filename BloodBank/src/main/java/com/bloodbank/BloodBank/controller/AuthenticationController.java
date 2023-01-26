@@ -14,10 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
@@ -45,11 +42,15 @@ public class AuthenticationController {
 
         // Ukoliko je autentifikacija uspesna, ubaci korisnika u trenutni security
         // kontekst
+        //ovde proveri da li je od korisnika enabled na true ako nije return Bad Request
+        RegistredUser user = (RegistredUser) authentication.getPrincipal();
+        if(!user.isEnabled()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Kreiraj token za tog korisnika
-        RegistredUser user = (RegistredUser) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getUsername());
+        String jwt = tokenUtils.generateToken(user.getUsername(), user.getRoles());
         int expiresIn = tokenUtils.getExpiredIn();
 
         // Vrati token kao odgovor na uspesnu autentifikaciju
@@ -63,5 +64,10 @@ public class AuthenticationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "confirm")
+    public String confirm(@RequestParam("token") String token) {
+        return registredUserService.confirmToken(token);
     }
 }

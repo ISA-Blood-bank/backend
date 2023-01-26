@@ -1,10 +1,9 @@
 package com.bloodbank.BloodBank.service;
 
-import com.bloodbank.BloodBank.model.Address;
-import com.bloodbank.BloodBank.model.BloodCenter;
-import com.bloodbank.BloodBank.model.MedicalStaff;
-import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.*;
+import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.repository.AddressRepository;
+import com.bloodbank.BloodBank.repository.AppointmentRepository;
 import com.bloodbank.BloodBank.repository.BloodCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +27,8 @@ public class BloodCenterSevice {
     private BloodCenterRepository bloodCenterRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private AppointmentRepository appointmentRepository;
     public BloodCenterSevice(BloodCenterRepository bloodCenterRepository){
         this.bloodCenterRepository = bloodCenterRepository;
     }
@@ -141,5 +144,19 @@ public class BloodCenterSevice {
         }
         return sorts;
 
+    }
+    public List<BloodCenter> getAvailableBloodCenters(RecommendDto recommendDto){
+        List<BloodCenter> available = new ArrayList<BloodCenter>();
+        List<Appointment> appointments = appointmentRepository.findAll();
+        for(Appointment appointment : appointments){
+            if(appointment.isAvailable()){
+                if(recommendDto.getStart().isEqual(appointment.getStart())){
+                    if(!available.contains(appointment.getBloodCenter())){
+                        available.add(appointment.getBloodCenter());
+                    }
+                }
+            }
+        }
+        return available;
     }
 }

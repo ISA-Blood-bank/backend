@@ -1,6 +1,9 @@
 package com.bloodbank.BloodBank.utils;
 
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.Role;
+import com.bloodbank.BloodBank.repository.RegisteredUserRepository;
+import com.bloodbank.BloodBank.service.RegisteredUserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class TokenUtils {
@@ -29,13 +33,14 @@ public class TokenUtils {
     private static final String AUDIENCE_WEB = "web";
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    public String generateToken(String username) {
+    public String generateToken(String username, List<Role> roles) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(username)
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
+                .claim("role", roles)
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
 
