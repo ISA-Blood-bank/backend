@@ -1,5 +1,11 @@
 # backend
 
+Datum jednog od commit-ova koji sam
+push-ovala je 1.2.2023. Razlog tome je što sam na
+svom računaru menjala vreme i datum kako bih istestirala brisanje penala
+svakog prvog u mesecu i zaboravila da vratim pre nego što sam uradila
+push. Stvarni datum tog commit-a je pre 25.1.2023.
+
 -- Lozinka za sva tri user-a je 123
 
 insert into address (city, country, number, street ) values ('Novi sad', 'Srbija', 3, 'narodnog fronta');
