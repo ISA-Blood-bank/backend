@@ -77,6 +77,7 @@ public class BloodCenterController {
     }
 
     @GetMapping(value = "/sorted/{page}/{size}/{sortList}/{order}")
+    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public ResponseEntity<List<BloodCenter>> findAllSortedAndFiltered(@PathVariable Integer page,
                                                                       @PathVariable Integer size,
                                                                       @PathVariable String sortList,

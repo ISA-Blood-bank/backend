@@ -1,5 +1,6 @@
 package com.bloodbank.BloodBank;
 
+import com.bloodbank.BloodBank.thread.PenaltiesThread;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,9 @@ public class BloodBankApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BloodBankApplication.class, args);
+		//System.out.println("Creathing thread" );
+		//final Thread thread1 = new Thread(new PenaltiesThread());
+		//thread1.start();
 	}
 
 	}

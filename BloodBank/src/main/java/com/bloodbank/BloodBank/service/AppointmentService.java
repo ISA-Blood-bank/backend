@@ -42,6 +42,7 @@ public class AppointmentService {
     @Autowired
     private RegisteredUserService registeredUserService;
 
+
     public List<Appointment> findAll(){
         return appointmentRepository.findAll();
     }
@@ -83,7 +84,7 @@ public class AppointmentService {
                 }
             }
 
-            if(canScheduleReports && canScheduleQuestionaire) {
+            if(canScheduleReports && canScheduleQuestionaire && user.getPenalties() < 3 && this.firstScheduling(user.getId(), appointmentId)) {
                 appointment.setAvailable(false);
                 ScheduledAppointment newScheduledAppointment = new ScheduledAppointment(-1, appointment, user, false, false);
                 scheduledAppointmentRepository.save(newScheduledAppointment);
@@ -144,5 +145,14 @@ public class AppointmentService {
             }
         }
         return available;
+    }
+
+    private boolean firstScheduling(int userId, int appointmentId){
+        for (ScheduledAppointment sa:scheduledAppointmentRepository.findAllByUserIdCanceled(userId)) {
+            if(sa.getAppointment().getId() == appointmentId){
+                return false;
+            }
+        }
+        return true;
     }
 }

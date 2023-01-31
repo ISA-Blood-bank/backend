@@ -201,4 +201,11 @@ public class RegisteredUserService {
     public RegistredUser findByEmail(String email){
        return regUserRep.findByEmail(email);
     }
+
+    public void resetPenalties(){
+        for (RegistredUser r:regUserRep.findAll()) {
+            r.setPenalties(0);
+            regUserRep.save(r);
+        }
+    }
 }
