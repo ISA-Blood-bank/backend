@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -76,7 +77,7 @@ public class AppointmentController {
     @Transactional
     @PostMapping("/schedule-recommended-appointment")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> scheduleRecommendedAppointment(@RequestBody ScheduleRecommendedDto dto) {
+    public ResponseEntity<String> scheduleRecommendedAppointment(@RequestBody ScheduleRecommendedDto dto) throws MessagingException {
         //TODO:generisanje QR koda
         RecommendDto newDto = new RecommendDto();
         newDto.setTime(dto.getTime());

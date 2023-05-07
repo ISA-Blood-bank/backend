@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class AppointmentService {
 
     @Autowired
     private RegisteredUserService registeredUserService;
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private BloodCenterRepository bloodCenterRepository;
@@ -155,15 +159,17 @@ public class AppointmentService {
 
     @Transactional(readOnly = false)
     //zakazi izabrani preporuceni termin(ili vec postojeci slobodan ili napravi novi pa zakazi)
-    public Appointment scheduleRecommendedAppointment(RecommendDto dto, int bloodcenter_id){
+    public Appointment scheduleRecommendedAppointment(RecommendDto dto, int bloodcenter_id) throws MessagingException {
         int id_appointment = checkIfFreeAppointmentExists(dto.getStart(), bloodcenter_id);
         if( id_appointment != -1){
+
             return scheduleAppointment(id_appointment);
         }
         List<MedicalStaff> med_staff_from_bc = medicalStaffRepository.findByBloodCenterId(bloodcenter_id);
         RegistredUser medicalStaff = userRepository.getById(med_staff_from_bc.get(0).getId());
         Appointment newAppointment = new Appointment(-1, dto.getStart(), 1, true, bloodCenterRepository.getById(bloodcenter_id), medicalStaff);
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
+        emailService.sendAppointmentScheduledMail("tasakrgovic@gmail.com", "Uspesno je zakazan termin!");
 
         return scheduleAppointment(savedAppointment.getId());
     }
