@@ -1,9 +1,6 @@
 package com.bloodbank.BloodBank.controller;
 
-import com.bloodbank.BloodBank.model.Blood;
-import com.bloodbank.BloodBank.model.BloodCenter;
-import com.bloodbank.BloodBank.model.MedicalStaff;
-import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.BloodCenterDto;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.service.BloodCenterSevice;
@@ -32,7 +29,6 @@ public class BloodCenterController {
         this.bloodCenterSevice = bloodCenterSevice;
     }
     @GetMapping(value = "/all")
-    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public ResponseEntity<List<BloodCenter>> findAll(){
 
         List<BloodCenter> bloodCenters = bloodCenterSevice.findAll();
@@ -77,7 +73,7 @@ public class BloodCenterController {
     }
 
     @GetMapping(value = "/sorted/{page}/{size}/{sortList}/{order}")
-    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_NOTAUTH') || hasRole('ROLE_ADMIN') || hasRole('ROLE_USER')")
     public ResponseEntity<List<BloodCenter>> findAllSortedAndFiltered(@PathVariable Integer page,
                                                                       @PathVariable Integer size,
                                                                       @PathVariable String sortList,
@@ -88,13 +84,16 @@ public class BloodCenterController {
        //List<BloodCenter> list = p.getContent();
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
+    //za prikaz dostupnih blood centers za zadati termin
+    //TODO: dodati paginator za sortiranje po oceni
     @PostMapping("/getavailable")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<BloodCenter>> getAvailableBloodCenters(@RequestBody RecommendDto recommendDto){
-        LocalDateTime time = recommendDto.getStart().plusHours(1);
+    public ResponseEntity<List<BloodCenter>> findAvailableBloodCenters(@RequestBody RecommendDto recommendDto){
+        LocalDateTime time = recommendDto.getStart().plusHours(2);
         recommendDto.setStart(time);
-        List<BloodCenter> available = bloodCenterSevice.getAvailableBloodCenters(recommendDto);
+        List<BloodCenter> available = bloodCenterSevice.findAvailableBloodCenters(recommendDto);
         return new ResponseEntity<>(available, HttpStatus.OK);
     }
+
 
 }

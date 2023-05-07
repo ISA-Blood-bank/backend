@@ -21,6 +21,6 @@ public class BloodBankApplication {
 		//thread1.start();
 	}
 
-	}
+}
 
 

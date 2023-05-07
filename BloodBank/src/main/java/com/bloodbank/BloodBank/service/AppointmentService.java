@@ -5,6 +5,7 @@ import com.bloodbank.BloodBank.model.dto.AppointmentDto;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.repository.*;
 import com.bloodbank.BloodBank.security.auth.TokenBasedAuthentication;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,8 @@ public class AppointmentService {
     @Autowired
     private RegisteredUserService registeredUserService;
 
+    @Autowired
+    private BloodCenterRepository bloodCenterRepository;
 
     public List<Appointment> findAll(){
         return appointmentRepository.findAll();
@@ -127,11 +131,13 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
 
     }
-    public Appointment createNewAppointment(AppointmentDto appointment){
-        MedicalStaff ms = medicalStaffRepository.getById(appointment.getMedicalStaffId());
+    @Transactional(readOnly = false)
+    public Appointment createNewAvailableAppointment(AppointmentDto appointment){
+        MedicalStaff ms = medicalStaffRepository.findByRegUserId(appointment.getMedicalStaffId());
         BloodCenter bc = ms.getBloodCenter();
         RegistredUser ru = userRepository.getById(appointment.getMedicalStaffId());
         Appointment appointment1 = new Appointment(appointment.getId(), appointment.getStart(),appointment.getDuration(),true,bc,ru);
+        //appointment1.setId(9);
         return appointmentRepository.save(appointment1);
     }
     public List<Appointment> getAvailableAppointments(RecommendDto recommendDto){
@@ -145,6 +151,32 @@ public class AppointmentService {
             }
         }
         return available;
+    }
+
+    @Transactional(readOnly = false)
+    //zakazi izabrani preporuceni termin(ili vec postojeci slobodan ili napravi novi pa zakazi)
+    public Appointment scheduleRecommendedAppointment(RecommendDto dto, int bloodcenter_id){
+        int id_appointment = checkIfFreeAppointmentExists(dto.getStart(), bloodcenter_id);
+        if( id_appointment != -1){
+            return scheduleAppointment(id_appointment);
+        }
+        List<MedicalStaff> med_staff_from_bc = medicalStaffRepository.findByBloodCenterId(bloodcenter_id);
+        RegistredUser medicalStaff = userRepository.getById(med_staff_from_bc.get(0).getId());
+        Appointment newAppointment = new Appointment(-1, dto.getStart(), 1, true, bloodCenterRepository.getById(bloodcenter_id), medicalStaff);
+        Appointment savedAppointment = appointmentRepository.save(newAppointment);
+
+        return scheduleAppointment(savedAppointment.getId());
+    }
+
+    //provera da li izabrani bloodcenter vec ima slobodan termin u to vreme koji se moze zakazati
+    public int checkIfFreeAppointmentExists(LocalDateTime date, int bloodcenter_id){
+        List<Appointment> appointments = appointmentRepository.findByBloodCenterId(bloodcenter_id);
+        for(Appointment appointment : appointments){
+            if(appointment.getStart().isEqual(date)){
+                return appointment.getId(); // postoji slobodan appointment u zadatom terminu
+            }
+        }
+        return -1; //pravi se novi appointment objekat
     }
 
     private boolean firstScheduling(int userId, int appointmentId){

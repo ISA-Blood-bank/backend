@@ -1,5 +1,7 @@
 package com.bloodbank.BloodBank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,6 +20,7 @@ public class Appointment {
     private BloodCenter bloodCenter;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "medical_staff_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private RegistredUser medicalStaff;
 
     @Version

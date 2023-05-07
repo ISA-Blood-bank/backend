@@ -24,8 +24,8 @@ public class MedicalStaffService {
         boolean found=false;
         for(Address a :  addressRepository.findAll())
         {
-              if(a.getCity().equals(ms.getAddress().getCity()) && a.getCountry().equals(ms.getAddress().getCountry()) &&
-                    a.getNumber().equals(ms.getAddress().getNumber())&& a.getStreet().equals(ms.getAddress().getStreet()))
+              if(a.getCity().equals(ms.getRegisteredUser().getAddress().getCity()) && a.getCountry().equals(ms.getRegisteredUser().getAddress().getCountry()) &&
+                    a.getNumber().equals(ms.getRegisteredUser().getAddress().getNumber())&& a.getStreet().equals(ms.getRegisteredUser().getAddress().getStreet()))
             {
                 identical=a;
                 found=true;
@@ -39,8 +39,8 @@ public class MedicalStaffService {
         boolean found=false;
         for(MedicalStaff a :  medialStaffRepository.findAll())
         {
-            if((a.getName().equals(ms.getName())&&a.getSurname().equals(ms.getSurname())&&
-                    a.getEmail().equals(ms.getEmail())) || a.getJmbg().equals(ms.getJmbg()))
+            if((a.getRegisteredUser().getName().equals(ms.getRegisteredUser().getName())&&a.getRegisteredUser().getSurname().equals(ms.getRegisteredUser().getSurname())&&
+                    a.getRegisteredUser().getEmail().equals(ms.getRegisteredUser().getEmail())) || a.getRegisteredUser().getJmbg().equals(ms.getRegisteredUser().getJmbg()))
             {
                 identicalMs=a;
                 found=true;
@@ -53,14 +53,14 @@ public class MedicalStaffService {
     public MedicalStaff addMedicalStaff(MedicalStaff ms){
         if(exists(ms)==true)
         {
-            ms.setAddress(identical);
+            ms.getRegisteredUser().setAddress(identical);
         }
         else {
-            Address address =addressRepository.save(ms.getAddress());
-            ms.setAddress(address);
+            Address address =addressRepository.save(ms.getRegisteredUser().getAddress());
+            ms.getRegisteredUser().setAddress(address);
         }
 
-        ms.setPassword("1111");
+        ms.getRegisteredUser().setPassword("1111");
         if(existsMedicalStaff(ms)==false)
         {
             return medialStaffRepository.save(ms);
@@ -82,7 +82,7 @@ public class MedicalStaffService {
     }
 
     public MedicalStaff updateMedicalStaff(MedicalStaff ms){
-        Address newAddress = ms.getAddress();
+        Address newAddress = ms.getRegisteredUser().getAddress();
         boolean found = false;
         for(Address a: addressRepository.findAll()){
             if(isSameAddress(a, newAddress)){
@@ -93,11 +93,11 @@ public class MedicalStaffService {
         }
 
         if(found){
-            ms.setAddress(newAddress);
+            ms.getRegisteredUser().setAddress(newAddress);
         } else {
             newAddress.setId(-1);
             Address address = addressRepository.save(newAddress);
-            ms.setAddress(address);
+            ms.getRegisteredUser().setAddress(address);
         }
 
         return  medialStaffRepository.save(ms);
