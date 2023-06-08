@@ -56,7 +56,7 @@ public class AppointmentService {
     }
 
     @Transactional(readOnly = false)
-    public Appointment scheduleAppointment(Integer appointmentId){
+    public Appointment scheduleAppointment(Integer appointmentId) throws MessagingException {
             Appointment appointment = appointmentRepository.findById(appointmentId).orElseGet(null);
             if(appointment == null){
                 return appointment;
@@ -96,6 +96,7 @@ public class AppointmentService {
                 appointment.setAvailable(false);
                 ScheduledAppointment newScheduledAppointment = new ScheduledAppointment(-1, appointment, user, false, false);
                 scheduledAppointmentRepository.save(newScheduledAppointment);
+                emailService.sendAppointmentScheduledMail("tasakrgovic@gmail.com", "Uspesno je zakazan termin!");
                 return appointmentRepository.save(appointment);
             }
         return null;

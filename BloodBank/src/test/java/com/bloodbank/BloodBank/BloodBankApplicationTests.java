@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -64,7 +65,11 @@ public class BloodBankApplicationTests {
 			public void run() {
 				System.out.println("Startovan Thread 1");
 				try { Thread.sleep(3000); } catch (InterruptedException e) {}// thread uspavan na 3 sekunde da bi drugi thread mogao da izvrsi istu operaciju
-				appointmentService.scheduleAppointment(1);// bacice ObjectOptimisticLockingFailureException
+				try {
+					appointmentService.scheduleAppointment(1);// bacice ObjectOptimisticLockingFailureException
+				} catch (MessagingException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		});
 		executor.submit(new Runnable() {
@@ -88,7 +93,11 @@ public class BloodBankApplicationTests {
 				 *
 				 * Moze se primetiti da automatski dodaje na upit i proveru o verziji
 				 */
-				appointmentService.scheduleAppointment(1);
+				try {
+					appointmentService.scheduleAppointment(1);
+				} catch (MessagingException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		});
 		try {

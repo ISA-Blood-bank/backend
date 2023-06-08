@@ -37,7 +37,7 @@ public class AppointmentController {
 
     @PutMapping("/schedule/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Appointment> scheduleAppointment(@PathVariable("id") Integer id){
+    public ResponseEntity<Appointment> scheduleAppointment(@PathVariable("id") Integer id) throws MessagingException {
         Appointment scheduled = appointmentService.scheduleAppointment(id);
         if(scheduled == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -78,7 +78,6 @@ public class AppointmentController {
     @PostMapping("/schedule-recommended-appointment")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> scheduleRecommendedAppointment(@RequestBody ScheduleRecommendedDto dto) throws MessagingException {
-        //TODO:generisanje QR koda
         RecommendDto newDto = new RecommendDto();
         newDto.setTime(dto.getTime());
         newDto.setStart(dto.getStart().plusHours(2));

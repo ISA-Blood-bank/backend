@@ -28,7 +28,7 @@ public class BloodCenterController {
     public BloodCenterController(BloodCenterSevice bloodCenterSevice){
         this.bloodCenterSevice = bloodCenterSevice;
     }
-    @GetMapping(value = "/all")
+    @GetMapping("/all")
     public ResponseEntity<List<BloodCenter>> findAll(){
 
         List<BloodCenter> bloodCenters = bloodCenterSevice.findAll();
@@ -85,7 +85,6 @@ public class BloodCenterController {
         return new ResponseEntity<>(p, HttpStatus.OK);
     }
     //za prikaz dostupnih blood centers za zadati termin
-    //TODO: dodati paginator za sortiranje po oceni
     @PostMapping("/getavailable")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<BloodCenter>> findAvailableBloodCenters(@RequestBody RecommendDto recommendDto){
@@ -94,6 +93,4 @@ public class BloodCenterController {
         List<BloodCenter> available = bloodCenterSevice.findAvailableBloodCenters(recommendDto);
         return new ResponseEntity<>(available, HttpStatus.OK);
     }
-
-
 }

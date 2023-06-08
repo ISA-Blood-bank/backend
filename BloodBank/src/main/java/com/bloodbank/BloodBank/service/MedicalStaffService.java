@@ -106,4 +106,8 @@ public class MedicalStaffService {
     public List<MedicalStaff> findAllByBloodCenterId(Integer id){
         return  medialStaffRepository.findAllByBloodCenterId(id);
     }
+
+    public MedicalStaff findByRegUserId(Integer id){
+        return medialStaffRepository.findByRegUserId(id);
+    }
 }
