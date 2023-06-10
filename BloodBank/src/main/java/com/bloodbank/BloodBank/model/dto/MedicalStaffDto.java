@@ -29,6 +29,9 @@ public class MedicalStaffDto {
         this.bloodCenter = bloodCenter;
     }
 
+    public MedicalStaffDto() {
+    }
+
     @Override
     public String toString() {
         return "MedicalStaffDto{" +
