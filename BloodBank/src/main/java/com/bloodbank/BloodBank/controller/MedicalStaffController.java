@@ -2,7 +2,10 @@ package com.bloodbank.BloodBank.controller;
 
 import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.dto.MedicalStaffDto;
+import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
 import com.bloodbank.BloodBank.service.MedicalStaffService;
+import com.bloodbank.BloodBank.service.RegisteredUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +20,17 @@ import java.util.List;
 public class MedicalStaffController {
     @Autowired
     private MedicalStaffService medicalStaffService;
+    @Autowired
+    private RegisteredUserService registeredUserService;
     @PostMapping("/add")
-    public ResponseEntity<MedicalStaff> addMedicalStaff(@RequestBody MedicalStaff user) {
-        MedicalStaff newUser = medicalStaffService.addMedicalStaff(user);
+    public ResponseEntity<MedicalStaff> addMedicalStaff(@RequestBody MedicalStaffDto user) {
+        RegistredUserDto registredUserDto= new RegistredUserDto(user.getId(),user.getName(),user.getSurname(),user.getJmbg(),
+                user.getGender(), user.getEmail(), user.getPassword1(), user.getPassword2(), user.getAddress());
+        RegistredUser registredUser = this.registeredUserService.addRegisteredUser(registredUserDto);
+        MedicalStaff medicalStaff = new MedicalStaff();
+        medicalStaff.setBloodCenter(user.getBloodCenter());
+        medicalStaff.setRegisteredUser(registredUser);
+        MedicalStaff newUser = medicalStaffService.addMedicalStaff(medicalStaff);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 

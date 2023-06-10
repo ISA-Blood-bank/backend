@@ -1,7 +1,9 @@
 package com.bloodbank.BloodBank.model.dto;
 
 import com.bloodbank.BloodBank.model.Address;
+import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.Role;
 import com.bloodbank.BloodBank.model.enums.Category;
 import com.bloodbank.BloodBank.model.enums.Gender;
 
@@ -9,6 +11,9 @@ import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class RegistredUserDto {
     private int id;
@@ -33,6 +38,22 @@ public class RegistredUserDto {
 
     public RegistredUserDto(RegistredUser registredUser) {
         this.id = registredUser.getId();
+
+    }
+
+    public RegistredUserDto(int id, String name, String surname, String jmbg, Gender gender, String email, String password1, String password2, Address address) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.jmbg = jmbg;
+        this.gender = gender;
+        this.email = email;
+        this.password1 = "123";
+        this.password2 = "123";
+        this.address = address;
+        this.occupation ="";
+        this.jobOrSchoolInfo="";
+        this.phone="";
 
     }
 

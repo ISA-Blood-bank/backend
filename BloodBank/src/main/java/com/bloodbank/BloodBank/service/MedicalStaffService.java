@@ -51,22 +51,23 @@ public class MedicalStaffService {
         return found;
     }
     public MedicalStaff addMedicalStaff(MedicalStaff ms){
-        if(exists(ms)==true)
+      /*  if(exists(ms)==true)
         {
             ms.getRegisteredUser().setAddress(identical);
         }
         else {
             Address address =addressRepository.save(ms.getRegisteredUser().getAddress());
             ms.getRegisteredUser().setAddress(address);
-        }
+        }*/
 
-        ms.getRegisteredUser().setPassword("1111");
+       // ms.getRegisteredUser().setPassword("1111");
         if(existsMedicalStaff(ms)==false)
         {
             return medialStaffRepository.save(ms);
         }
         return null;
     }
+
 
     public MedicalStaff findById(Integer id){
         return medialStaffRepository.findById(id).orElseGet(null);

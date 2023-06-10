@@ -28,7 +28,7 @@ INSERT INTO ROLE (name) VALUES ('ROLE_NOTAUTH');
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (1, 1); -- user-u dodeljujemo rolu USER
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (2, 2);
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (3, 3);
-INSERT INTO USER_ROLE (user_id, role_id) VALUES (4, 2);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (4, 3);
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (5, 2);
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (6, 1);
 
