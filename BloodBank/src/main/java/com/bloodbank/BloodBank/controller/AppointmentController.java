@@ -38,7 +38,8 @@ public class AppointmentController {
     @PutMapping("/schedule/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Appointment> scheduleAppointment(@PathVariable("id") Integer id) throws MessagingException {
-        Appointment scheduled = appointmentService.scheduleAppointment(id);
+        Appointment appointment = appointmentService.getById(id);
+        Appointment scheduled = appointmentService.scheduleAppointment(appointment);
         if(scheduled == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
