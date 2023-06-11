@@ -87,6 +87,7 @@ public class RegisteredUserService {
         registredUser.setPoints((float)0.0);
         registredUser.setPenalties(0);
         registredUser.setEnabled(false);
+        registredUser.setPasswordChanged(false);
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         registredUser.setLastPasswordResetDate(now);
         List<Role> roles = roleService.findByName("ROLE_USER");

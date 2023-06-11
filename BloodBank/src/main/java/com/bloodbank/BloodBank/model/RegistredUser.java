@@ -37,6 +37,7 @@ public class RegistredUser implements UserDetails {
 
     private String phone;
     private boolean enabled;
+
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
     @ManyToMany(fetch = FetchType.EAGER)
@@ -45,6 +46,8 @@ public class RegistredUser implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
+    private Boolean isPasswordChanged;
 
     public RegistredUser() {}
 
@@ -75,6 +78,14 @@ public class RegistredUser implements UserDetails {
         this.category = category;
         this.penalties = penalties;
         this.phone = phone;
+    }
+
+    public Boolean getPasswordChanged() {
+        return isPasswordChanged;
+    }
+
+    public void setPasswordChanged(Boolean passwordChanged) {
+        isPasswordChanged = passwordChanged;
     }
 
     public int getId() {
