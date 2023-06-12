@@ -70,6 +70,9 @@ public class RegisteredUserService {
             Address address =addressRepository.save(newAddress);
             registredUser.setAddress(address);
         }
+        RegistredUser user = findByEmail(registredUser.getEmail());
+        registredUser.setRoles(user.getRoles());
+        registredUser.setEnabled(true);
         return regUserRep.save(registredUser);
     }
     public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
