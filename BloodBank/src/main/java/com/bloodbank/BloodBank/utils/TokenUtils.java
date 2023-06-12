@@ -24,7 +24,7 @@ public class TokenUtils {
     @Value("somesecret")
     public String SECRET;
 
-    @Value("1800000")
+    @Value("180000000")
     private int EXPIRES_IN;
 
     @Value("Authorization")
@@ -33,7 +33,7 @@ public class TokenUtils {
     private static final String AUDIENCE_WEB = "web";
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    public String generateToken(String username, List<Role> roles) {
+    public String generateToken(String username, List<Role> roles, Boolean password, int id) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(username)
@@ -41,6 +41,8 @@ public class TokenUtils {
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
                 .claim("role", roles)
+                .claim ("passwordChanged",password)
+                .claim("userId",id)
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
 

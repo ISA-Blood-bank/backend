@@ -1,6 +1,7 @@
 package com.bloodbank.BloodBank.controller;
 
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.dto.PasswordDto;
 import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
 import com.bloodbank.BloodBank.service.RegisteredUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,11 @@ public class RegisteredUserController {
         RegistredUser newUser = regUserService.updateRegisteredUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
+    @PutMapping("/changePassword")
+    public ResponseEntity<RegistredUser> changePassword(@RequestBody PasswordDto dto) {
+        RegistredUser newUser = regUserService.ChangePassword(dto);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
+    }
     @GetMapping("/searchRegisteredUser/{searchInput}")
     public ResponseEntity<List<RegistredUser>> search(@PathVariable String searchInput){
         List<RegistredUser> list = regUserService.search(searchInput);

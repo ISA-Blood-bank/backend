@@ -35,6 +35,11 @@ public class MedicalStaffService {
         }
         return found;
     }
+
+    public int getBloodCenterIdByUserId (int userid){
+        MedicalStaff medicalStaff = this.medialStaffRepository.findByRegUserId(userid);
+        return medicalStaff.getBloodCenter().getId();
+    }
     private boolean existsMedicalStaff(MedicalStaff ms){
         boolean found=false;
         for(MedicalStaff a :  medialStaffRepository.findAll())

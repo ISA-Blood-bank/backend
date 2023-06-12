@@ -1,6 +1,7 @@
 package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.*;
+import com.bloodbank.BloodBank.model.dto.PasswordDto;
 import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
 import com.bloodbank.BloodBank.model.enums.Category;
 import com.bloodbank.BloodBank.registration.ConfirmationToken;
@@ -68,6 +69,13 @@ public class RegisteredUserService {
             Address address =addressRepository.save(newAddress);
             registredUser.setAddress(address);
         }
+        return regUserRep.save(registredUser);
+    }
+
+    public RegistredUser ChangePassword(PasswordDto dto){
+        RegistredUser registredUser = this.regUserRep.findByEmail(dto.getEmail());
+        registredUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+        registredUser.setPasswordChanged(true);
         return regUserRep.save(registredUser);
     }
     public RegistredUser adminRegistrationHelper(RegistredUserDto dto ){
@@ -215,11 +223,5 @@ public class RegisteredUserService {
         }
     }
 
-    public Boolean passwordNeedsToBeChanged (RegistredUser user){
-        if (user.getPasswordChanged()){
-            //ovo znaci da ne treba menjati
-            return false;
-        }
-        return true;
-    }
+
 }

@@ -16,7 +16,7 @@ insert into blood_center (name, address_id, description, average_score) values (
 insert into blood_center (name, address_id, description, average_score) values ('Blue cross', 2, 'nice', 4);
 insert into blood_center (name, address_id, description, average_score) values ('Novi Sad Blood Center', 3, 'really good', 4.4);
 
-insert into medical_staff (registered_user_id, blood_center_id) values (1,1);
+insert into medical_staff (registered_user_id, blood_center_id) values (2,1);
 insert into medical_staff (registered_user_id, blood_center_id) values (4,2);
 insert into medical_staff (registered_user_id, blood_center_id) values (5,3);
 

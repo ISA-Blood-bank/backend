@@ -18,4 +18,5 @@ public interface MedicalStaffRepository extends JpaRepository<MedicalStaff, Inte
     @Query("select b from MedicalStaff b where b.bloodCenter.id = :id")
     public List<MedicalStaff> findByBloodCenterId(@Param("id") int id);
 
+
 }

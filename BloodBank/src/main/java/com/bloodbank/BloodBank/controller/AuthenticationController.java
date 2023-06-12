@@ -49,18 +49,8 @@ public class AuthenticationController {
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
-        //ovo je deo za admina sistema kad mora da menja lozinku
-
-      /* Boolean passwordChange = this.registredUserService.passwordNeedsToBeChanged(user);
-       if(passwordChange){
-           return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-       }*/
-
-
-
         // Kreiraj token za tog korisnika
-        String jwt = tokenUtils.generateToken(user.getUsername(), user.getRoles());
+        String jwt = tokenUtils.generateToken(user.getUsername(), user.getRoles(),user.getPasswordChanged(), user.getId());
         int expiresIn = tokenUtils.getExpiredIn();
 
         // Vrati token kao odgovor na uspesnu autentifikaciju

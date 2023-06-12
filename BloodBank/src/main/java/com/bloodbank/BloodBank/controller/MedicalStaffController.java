@@ -39,6 +39,11 @@ public class MedicalStaffController {
         MedicalStaff ms = medicalStaffService.findById(id);
         return new ResponseEntity<>(ms, HttpStatus.OK);
     }
+    @GetMapping("/findBloodCenterByUserId/{id}")
+    public ResponseEntity<Integer> getBloodCenterIdByUserId(@PathVariable("id") Integer id){
+        int ms = medicalStaffService.getBloodCenterIdByUserId(id);
+        return new ResponseEntity<>(ms, HttpStatus.OK);
+    }
 
     @GetMapping("/all-medical-staff/{bloodCenterId}")
     public ResponseEntity<List<MedicalStaff>> findAll(@PathVariable("bloodCenterId") Integer bloodCenterId){
