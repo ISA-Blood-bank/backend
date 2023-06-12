@@ -16,11 +16,11 @@ public class BloodBankApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BloodBankApplication.class, args);
-		//System.out.println("Creathing thread" );
+		//System.out.println("Creathing thread");
 		//final Thread thread1 = new Thread(new PenaltiesThread());
 		//thread1.start();
 	}
 
-	}
+}
 
 

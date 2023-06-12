@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import static java.lang.Float.parseFloat;
 
@@ -145,18 +146,32 @@ public class BloodCenterSevice {
         return sorts;
 
     }
-    public List<BloodCenter> getAvailableBloodCenters(RecommendDto recommendDto){
-        List<BloodCenter> available = new ArrayList<BloodCenter>();
-        List<Appointment> appointments = appointmentRepository.findAll();
-        for(Appointment appointment : appointments){
-            if(appointment.isAvailable()){
-                if(recommendDto.getStart().isEqual(appointment.getStart())){
-                    if(!available.contains(appointment.getBloodCenter())){
-                        available.add(appointment.getBloodCenter());
-                    }
+    public boolean isOverlap(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
+        return (end1.isAfter(start2) || end1.isEqual(start2)) && (end2.isAfter(start1) || end2.isEqual(start1));
+    }
+
+    public boolean isThereScheduledAppointment(int bc_id, LocalDateTime time){
+        List<Appointment> appointments = appointmentRepository.findByBloodCenterId(bc_id);
+        LocalDateTime startTime = time;
+        LocalDateTime endTime = startTime.plusHours(1);
+        for(Appointment a: appointments){
+            LocalDateTime a_start = a.getStart();
+            LocalDateTime a_end = a.getStart().plusHours((long) a.getDuration());
+            if(!a.isAvailable()){
+                //provera da li je se preklapaju datumi i vreme dva termina
+                if(isOverlap(startTime, endTime, a_start, a_end)){
+                    return true;
                 }
             }
         }
-        return available;
+        return false;
+    }
+    //vraca sve blood centers koji su slobodni u zadatom terminu (3.)
+    public List<BloodCenter> findAvailableBloodCenters(RecommendDto dto){
+        List<BloodCenter> bloodcenters = bloodCenterRepository.findAll();
+        List<BloodCenter> availableBloodCenters = bloodcenters.stream()
+                .filter(bc -> !isThereScheduledAppointment(bc.getId(), dto.getStart()))
+                .collect(Collectors.toList());
+        return availableBloodCenters;
     }
 }

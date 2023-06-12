@@ -5,13 +5,17 @@ import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.AppointmentDto;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
+import com.bloodbank.BloodBank.model.dto.ScheduleRecommendedDto;
 import com.bloodbank.BloodBank.service.AppointmentService;
+import com.bloodbank.BloodBank.service.BloodCenterSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +27,7 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
+
     @GetMapping("/all")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Appointment>> getAll(){
@@ -32,8 +37,9 @@ public class AppointmentController {
 
     @PutMapping("/schedule/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Appointment> scheduleAppointment(@PathVariable("id") Integer id){
-        Appointment scheduled = appointmentService.scheduleAppointment(id);
+    public ResponseEntity<Appointment> scheduleAppointment(@PathVariable("id") Integer id) throws MessagingException {
+        Appointment appointment = appointmentService.getById(id);
+        Appointment scheduled = appointmentService.scheduleAppointment(appointment);
         if(scheduled == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -51,20 +57,36 @@ public class AppointmentController {
         List<Appointment> appointments = appointmentService.findAllSortedAndAvailable(page, size, sortList, order);
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
+    @Transactional
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MEDSTAFF')")
     public ResponseEntity<Appointment> createNewAppointment(@RequestBody AppointmentDto appointment) {
-        LocalDateTime time = appointment.getStart().plusHours(1);
+        LocalDateTime time = appointment.getStart().plusHours(2);
         appointment.setStart(time);
-        Appointment appointmentNew = appointmentService.createNewAppointment(appointment);
+        Appointment appointmentNew = appointmentService.createNewAvailableAppointment(appointment);
         return new ResponseEntity<>(appointmentNew, HttpStatus.CREATED);
     }
     @PostMapping("/getavailable")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Appointment>> getAvailableAppointments(@RequestBody RecommendDto recommendDto){
-        LocalDateTime time = recommendDto.getStart().plusHours(1);
+        LocalDateTime time = recommendDto.getStart().plusHours(2);
         recommendDto.setStart(time);
         List<Appointment> available = appointmentService.getAvailableAppointments(recommendDto);
         return new ResponseEntity<>(available, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PostMapping("/schedule-recommended-appointment")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> scheduleRecommendedAppointment(@RequestBody ScheduleRecommendedDto dto) throws MessagingException {
+        RecommendDto newDto = new RecommendDto();
+        newDto.setTime(dto.getTime());
+        newDto.setStart(dto.getStart().plusHours(2));
+        Appointment appointment = appointmentService.scheduleRecommendedAppointment(newDto, dto.getBloodcenterid());
+        if (appointment != null) {
+            return ResponseEntity.ok().body("{\"message\": \"Appointment scheduled successfully.\"}");
+        } else {
+            return ResponseEntity.ok().body("{\"message\": \"Could not schedule the appointment.\"}");
+        }
     }
 }

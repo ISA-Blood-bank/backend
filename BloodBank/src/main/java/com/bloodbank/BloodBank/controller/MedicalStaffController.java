@@ -28,6 +28,11 @@ public class MedicalStaffController {
         MedicalStaff ms = medicalStaffService.findById(id);
         return new ResponseEntity<>(ms, HttpStatus.OK);
     }
+    @GetMapping("/findbyuser/{id}")
+    public ResponseEntity<MedicalStaff> getOneByRegUserId(@PathVariable("id") Integer id){
+        MedicalStaff ms = medicalStaffService.findByRegUserId(id);
+        return new ResponseEntity<>(ms, HttpStatus.OK);
+    }
 
     @GetMapping("/all-medical-staff/{bloodCenterId}")
     public ResponseEntity<List<MedicalStaff>> findAll(@PathVariable("bloodCenterId") Integer bloodCenterId){
