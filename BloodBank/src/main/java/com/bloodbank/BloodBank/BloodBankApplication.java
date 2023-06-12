@@ -9,6 +9,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 
+import java.time.ZoneId;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -19,6 +20,9 @@ public class BloodBankApplication {
 		//System.out.println("Creathing thread");
 		//final Thread thread1 = new Thread(new PenaltiesThread());
 		//thread1.start();
+		ZoneId zoneId = ZoneId.systemDefault();
+		System.out.println("Vremenska zona: " + zoneId);
+
 	}
 
 }

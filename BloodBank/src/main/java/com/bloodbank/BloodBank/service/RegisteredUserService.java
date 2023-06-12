@@ -209,4 +209,12 @@ public class RegisteredUserService {
             regUserRep.save(r);
         }
     }
+
+    public Boolean passwordNeedsToBeChanged (RegistredUser user){
+        if (user.getPasswordChanged()){
+            //ovo znaci da ne treba menjati
+            return false;
+        }
+        return true;
+    }
 }

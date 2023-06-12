@@ -2,6 +2,8 @@ package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.AppointmentDto;
+import com.bloodbank.BloodBank.model.dto.CalendarAppointmentDto;
+import com.bloodbank.BloodBank.model.dto.CalendarFreeAppointmentDto;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.repository.*;
 import com.bloodbank.BloodBank.security.auth.TokenBasedAuthentication;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -192,5 +195,20 @@ public class AppointmentService {
             }
         }
         return true;
+    }
+
+    private LocalDateTime makeEndDate(float duration, LocalDateTime start){
+        LocalDateTime endDate = start.plusMinutes( Math.round(duration));
+        return endDate;
+    }
+    public List<CalendarFreeAppointmentDto> findByBloodCenterId (int idBloodCentra ){
+        List<Appointment> appointments = appointmentRepository.findByBloodCenterId(idBloodCentra);
+        List<CalendarFreeAppointmentDto> calendarFreeAppointmentDtos =  new ArrayList<>();
+        for (Appointment i : appointments){
+            LocalDateTime endDate = makeEndDate(i.getDuration(),i.getStart());
+            CalendarFreeAppointmentDto calendarAppointmentDto= new CalendarFreeAppointmentDto(i.getId(),i.getStart(),endDate,i.getDuration());
+            calendarFreeAppointmentDtos.add(calendarAppointmentDto);
+        }
+        return calendarFreeAppointmentDtos;
     }
 }

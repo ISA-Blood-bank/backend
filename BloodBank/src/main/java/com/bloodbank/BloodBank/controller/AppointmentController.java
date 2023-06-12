@@ -4,6 +4,7 @@ import com.bloodbank.BloodBank.model.Appointment;
 import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.AppointmentDto;
+import com.bloodbank.BloodBank.model.dto.CalendarFreeAppointmentDto;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.model.dto.ScheduleRecommendedDto;
 import com.bloodbank.BloodBank.service.AppointmentService;
@@ -34,7 +35,11 @@ public class AppointmentController {
         List<Appointment> appointments = appointmentService.findAll();
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
-
+    @GetMapping("/allCalendarFree/{id}")
+    public ResponseEntity<List<CalendarFreeAppointmentDto>> getAllFreeForCalendar(@PathVariable("id") Integer id){
+        List<CalendarFreeAppointmentDto> appointments = appointmentService.findByBloodCenterId(id);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
     @PutMapping("/schedule/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Appointment> scheduleAppointment(@PathVariable("id") Integer id){
