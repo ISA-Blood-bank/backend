@@ -204,10 +204,20 @@ public class AppointmentService {
     public List<CalendarFreeAppointmentDto> findByBloodCenterId (int idBloodCentra ){
         List<Appointment> appointments = appointmentRepository.findByBloodCenterId(idBloodCentra);
         List<CalendarFreeAppointmentDto> calendarFreeAppointmentDtos =  new ArrayList<>();
+        ScheduledAppointment scheduledAppointment =  new ScheduledAppointment();
+        CalendarFreeAppointmentDto finalDto = new CalendarFreeAppointmentDto();
         for (Appointment i : appointments){
             LocalDateTime endDate = makeEndDate(i.getDuration(),i.getStart());
-            CalendarFreeAppointmentDto calendarAppointmentDto= new CalendarFreeAppointmentDto(i.getId(),i.getStart(),endDate,i.getDuration());
-            calendarFreeAppointmentDtos.add(calendarAppointmentDto);
+            if (i.isAvailable()){
+                CalendarFreeAppointmentDto calendarAppointmentDto= new CalendarFreeAppointmentDto(i.getId(),i.getStart(),endDate,"","",i.getMedicalStaff().getName(),i.getMedicalStaff().getSurname(),i.getDuration());
+                finalDto =calendarAppointmentDto;
+            }
+            else{
+                scheduledAppointment = this.scheduledAppointmentRepository.findByAppointmentId(i.getId());
+                CalendarFreeAppointmentDto calendarAppointmentDto= new CalendarFreeAppointmentDto(i.getId(),i.getStart(),endDate,scheduledAppointment.getUser().getName(),scheduledAppointment.getUser().getSurname(),i.getMedicalStaff().getName(),i.getMedicalStaff().getSurname(),i.getDuration());
+                finalDto =calendarAppointmentDto;
+            }
+            calendarFreeAppointmentDtos.add(finalDto);
         }
         return calendarFreeAppointmentDtos;
     }
