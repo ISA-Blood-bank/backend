@@ -76,7 +76,14 @@ public class AuthenticationController {
         }
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
-
+    @PostMapping("/adminSignup")
+    public ResponseEntity<RegistredUser> addAdmin(@RequestBody RegistredUserDto user, UriComponentsBuilder ucBuilder) {
+        RegistredUser newUser = registredUserService.adminRegistrationHelper(user);
+        if(newUser == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    }
     @GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token) {
         return registredUserService.confirmToken(token);

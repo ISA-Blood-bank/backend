@@ -70,6 +70,11 @@ public class RegisteredUserService {
         }
         return regUserRep.save(registredUser);
     }
+    public RegistredUser adminRegistrationHelper(RegistredUserDto dto ){
+        dto.setPassword1("123");
+        dto.setPassword2("123");
+       return addRegisteredUser(dto);
+    }
     public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
         if(jmbgNotUnique(registredUserDto) || emailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
             return null;
