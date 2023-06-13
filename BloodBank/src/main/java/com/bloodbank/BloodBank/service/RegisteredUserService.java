@@ -8,6 +8,7 @@ import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.ConfirmationTokenRepository;
 import com.bloodbank.BloodBank.repository.RegisteredUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +49,8 @@ public class RegisteredUserService {
     public List<RegistredUser> findAll(){
         return regUserRep.findAll();
     }
-    public RegistredUser updateRegisteredUser(RegistredUser registredUser){
+    @Transactional(readOnly = false)
+    public RegistredUser updateRegisteredUser(RegistredUser registredUser) throws ObjectOptimisticLockingFailureException {
         Address newAddress = registredUser.getAddress();
         boolean found = false;
         for(Address a : addressRepository.findAll()){
@@ -68,6 +70,9 @@ public class RegisteredUserService {
             Address address =addressRepository.save(newAddress);
             registredUser.setAddress(address);
         }
+        RegistredUser user = findByEmail(registredUser.getEmail());
+        registredUser.setRoles(user.getRoles());
+        registredUser.setEnabled(true);
         return regUserRep.save(registredUser);
     }
     public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
