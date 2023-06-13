@@ -42,7 +42,7 @@ public class MedicalStaffController {
         return new ResponseEntity<>(ms, HttpStatus.OK);
     }
     @GetMapping("/findBloodCenterByUserId/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MEDSTAFF')")
     public ResponseEntity<Integer> getBloodCenterIdByUserId(@PathVariable("id") Integer id){
         int ms = medicalStaffService.getBloodCenterIdByUserId(id);
         return new ResponseEntity<>(ms, HttpStatus.OK);
