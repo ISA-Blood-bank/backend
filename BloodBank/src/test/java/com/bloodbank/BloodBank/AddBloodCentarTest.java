@@ -1,7 +1,7 @@
 package com.bloodbank.BloodBank;
 
 import com.bloodbank.BloodBank.exceptions.BloodCenterAlreadyExists;
-import com.bloodbank.BloodBank.exceptions.OverlappingAppointmentException;
+
 import com.bloodbank.BloodBank.model.Address;
 import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.service.BloodCenterSevice;
@@ -60,7 +60,7 @@ public class AddBloodCentarTest {
             public void run() {
                 try {
                     System.out.println("Started Thread 2");
-                    bloodCenterSevice.addBloodCenter(bloodCenter1);// bacice OverlappingAppointmentException
+                    bloodCenterSevice.addBloodCenter(bloodCenter1);
                 }
               /*  catch (Throwable t) {
 					System.out.println("Exception in Thread 2: " + t.getClass());

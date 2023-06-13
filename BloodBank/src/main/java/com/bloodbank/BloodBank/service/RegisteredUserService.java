@@ -11,6 +11,8 @@ import com.bloodbank.BloodBank.repository.RegisteredUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
@@ -83,6 +85,7 @@ public class RegisteredUserService {
         dto.setPassword2("123");
        return addRegisteredUser(dto);
     }
+    @Transactional(readOnly = false,isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
     public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
         if(jmbgNotUnique(registredUserDto) || emailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
             return null;

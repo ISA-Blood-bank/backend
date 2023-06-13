@@ -1,7 +1,7 @@
 package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.exceptions.BloodCenterAlreadyExists;
-import com.bloodbank.BloodBank.exceptions.OverlappingAppointmentException;
+
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.repository.AddressRepository;

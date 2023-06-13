@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true) //??
@@ -58,49 +60,59 @@ public class AppointmentService {
         return appointmentRepository.findAll();
     }
 
-    @Transactional(readOnly = false)
-    public Appointment scheduleAppointment(Integer appointmentId){
-            Appointment appointment = appointmentRepository.findById(appointmentId).orElseGet(null);
-            if(appointment == null){
-                return appointment;
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
+    public Appointment scheduleAppointment(Appointment appointment) throws MessagingException, ObjectOptimisticLockingFailureException {
+        //Appointment appointment = appointmentRepository.findById(appointmentId).orElseGet(null);
+        if(appointment == null){
+            return appointment;
+        }
+        RegistredUser user;
+        try{
+            TokenBasedAuthentication authentication = (TokenBasedAuthentication) SecurityContextHolder.getContext().getAuthentication();
+            user = (RegistredUser) authentication.getPrincipal();
+        }catch (final Exception e){
+            user = registeredUserService.findOne(1);
+        }
+
+
+
+        boolean canScheduleReports = true;
+        List<AppointmentReport> userReports = new ArrayList<>();
+        for (AppointmentReport ar: appointmentReportRepository.findAll()) {
+            if(ar.getAppointment().getUser().getId() == user.getId() && ar.isCanGiveBlood()){
+                userReports.add(ar);
             }
-            RegistredUser user;
-            try{
-                TokenBasedAuthentication authentication = (TokenBasedAuthentication) SecurityContextHolder.getContext().getAuthentication();
-                user = (RegistredUser) authentication.getPrincipal();
-            }catch (final Exception e){
-                user = registeredUserService.findOne(1);
+        }
+
+
+        if(!userReports.isEmpty()){
+            AppointmentReport lastReport = this.findLastReport(userReports);
+            canScheduleReports = this.IsBefore6Months(lastReport.getAppointment().getAppointment().getStart());
+        }
+
+        boolean canScheduleQuestionaire = false;
+        for(Questionnaire q : questionnaireRepository.findAll()){
+            if(q.getRegistredUser().getId() == user.getId()){
+                canScheduleQuestionaire = true;
             }
+        }
 
+        if(canScheduleReports && canScheduleQuestionaire && user.getPenalties() < 3 && this.firstScheduling(user.getId(), appointment.getId())) {
+            appointment.setAvailable(false);
+            ScheduledAppointment newScheduledAppointment = new ScheduledAppointment(-1, appointment, user, false, false);
+            scheduledAppointmentRepository.save(newScheduledAppointment);
+            emailService.sendAppointmentScheduledMail("tasakrgovic@gmail.com", "Uspesno je zakazan termin!");
 
+            return save(appointment);
 
-            boolean canScheduleReports = true;
-            List<AppointmentReport> userReports = new ArrayList<>();
-            for (AppointmentReport ar: appointmentReportRepository.findAll()) {
-                if(ar.getAppointment().getUser().getId() == user.getId() && ar.isCanGiveBlood()){
-                    userReports.add(ar);
-                }
-            }
-
-
-            if(!userReports.isEmpty()){
-                AppointmentReport lastReport = this.findLastReport(userReports);
-                canScheduleReports = this.IsBefore6Months(lastReport.getAppointment().getAppointment().getStart());
-            }
-
-            boolean canScheduleQuestionaire = false;
-            for(Questionnaire q : questionnaireRepository.findAll()){
-                if(q.getRegistredUser().getId() == user.getId()){
-                    canScheduleQuestionaire = true;
-                }
-            }
-
-            if(canScheduleReports && canScheduleQuestionaire && user.getPenalties() < 3 && this.firstScheduling(user.getId(), appointmentId)) {
-                appointment.setAvailable(false);
-                ScheduledAppointment newScheduledAppointment = new ScheduledAppointment(-1, appointment, user, false, false);
-                scheduledAppointmentRepository.save(newScheduledAppointment);
-                return appointmentRepository.save(appointment);
-            }
+        }
+        return null;
+    }
+    public Appointment getById(int id){
+        Optional<Appointment> app = appointmentRepository.findById(id);
+        if(app.isPresent()){
+            return app.get();
+        }
         return null;
     }
 
@@ -165,8 +177,8 @@ public class AppointmentService {
     public Appointment scheduleRecommendedAppointment(RecommendDto dto, int bloodcenter_id) throws MessagingException {
         int id_appointment = checkIfFreeAppointmentExists(dto.getStart(), bloodcenter_id);
         if( id_appointment != -1){
-
-            return scheduleAppointment(id_appointment);
+            Appointment appointmen = getById(id_appointment);
+            return scheduleAppointment(appointmen);
         }
         List<MedicalStaff> med_staff_from_bc = medicalStaffRepository.findByBloodCenterId(bloodcenter_id);
         RegistredUser medicalStaff = userRepository.getById(med_staff_from_bc.get(0).getId());
@@ -174,8 +186,9 @@ public class AppointmentService {
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
         emailService.sendAppointmentScheduledMail("tasakrgovic@gmail.com", "Uspesno je zakazan termin!");
 
-        return scheduleAppointment(savedAppointment.getId());
+        return scheduleAppointment(savedAppointment);
     }
+
 
     //provera da li izabrani bloodcenter vec ima slobodan termin u to vreme koji se moze zakazati
     public int checkIfFreeAppointmentExists(LocalDateTime date, int bloodcenter_id){
