@@ -40,7 +40,7 @@ public class UserProfileUpdateTest {
         }
 
     @Test(expected = ObjectOptimisticLockingFailureException.class)
-    public void appointmentBecomesUnavailable() throws Throwable {
+    public void firstUserUpdatesSecondCant() throws Throwable {
 
         ExecutorService executor = Executors.newFixedThreadPool(2);
         Future<?> future1 = executor.submit(new Runnable() {

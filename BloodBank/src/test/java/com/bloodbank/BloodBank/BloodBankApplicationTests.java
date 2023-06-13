@@ -72,7 +72,7 @@ public class BloodBankApplicationTests {
 			public void run() {
 				System.out.println("Startovan Thread 1");
 				Appointment appointment = appointmentService.getById(6);
-				try { Thread.sleep(5000); } catch (InterruptedException e) {}// thread uspavan na 3 sekunde da bi drugi thread mogao da izvrsi istu operaciju
+				try { Thread.sleep(3000); } catch (InterruptedException e) {}// thread uspavan na 3 sekunde da bi drugi thread mogao da izvrsi istu operaciju
 				try {
 					appointmentService.scheduleAppointment(appointment);// bacice ObjectOptimisticLockingFailureException
 				} catch (MessagingException e) {

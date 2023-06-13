@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -71,7 +72,7 @@ public class AppointmentSchedulingTests {
 					System.out.println("Exception in Thread 1: " + t.getClass());
 					throw t;
 				}*/
-                catch (JpaSystemException e){
+                catch (JpaSystemException | CannotAcquireLockException e){
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                     appointmentService.newPredefinedAppointment(appointment1);
                 }
@@ -86,14 +87,14 @@ public class AppointmentSchedulingTests {
                     System.out.println("Startovan Thread 2");
 
                     appointmentService.scheduleAppointment(appointment2);
-                } catch (Throwable t) {
+                } /*catch (Throwable t) {
                     System.out.println("Exception in Thread 2: " + t.getClass());
                     throw t;
-                }
-				/*catch(JpaSystemException e){
+                }*/
+				catch(JpaSystemException | CannotAcquireLockException e){
 					try { Thread.sleep(2000); } catch (InterruptedException ex) {}
 					appointmentService.scheduleAppointment(appointment2);
-				}*/
+				}
             }
         });
         try {
