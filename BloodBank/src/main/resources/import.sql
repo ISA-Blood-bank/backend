@@ -33,11 +33,11 @@ INSERT INTO USER_ROLE (user_id, role_id) VALUES (5, 2);
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (6, 1);
 
 
-insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2023-10-01 21:58:58.508-07', 1, true, 1, 2, 0);
-insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2023-10-02 21:58:58.508-07', 1, true, 1, 2, 0);
-insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2021-10-03 21:58:58.508-07', 1, false, 1, 2, 0);
-insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2020-10-03 21:58:58.508-07', 1, false, 1, 2, 0);
-insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2023-05-15 20:00:00', 1, false, 2, 4, 0);
+insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2023-10-01 09:58:58.508-07', 1, true, 1, 2, 0);
+insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2023-10-02 12:58:58.508-07', 1, true, 1, 2, 0);
+insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2021-10-03 15:58:58.508-07', 1, false, 1, 2, 0);
+insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2020-10-03 10:58:58.508-07', 1, false, 1, 2, 0);
+insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2023-05-15 17:00:00', 1, false, 2, 4, 0);
 insert into appointment ("start", duration, available, blood_center_id, medical_staff_id, "version") values ('2023-06-16 17:00:00', 1, true, 3, 5, 0);
 
 
