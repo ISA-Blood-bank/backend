@@ -1,5 +1,7 @@
 package com.bloodbank.BloodBank.service;
 
+import com.bloodbank.BloodBank.exceptions.BloodCenterAlreadyExists;
+import com.bloodbank.BloodBank.exceptions.OverlappingAppointmentException;
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.repository.AddressRepository;
@@ -11,6 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -66,7 +72,9 @@ public class BloodCenterSevice {
         }
         return found;
     }
-    public BloodCenter addBloodCenter(BloodCenter bc){
+
+   @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
+    public BloodCenter addBloodCenter(BloodCenter bc) throws BloodCenterAlreadyExists{
         if(exists(bc)==true)
         {
             bc.setAddress(identical);
@@ -74,12 +82,15 @@ public class BloodCenterSevice {
         else {
             Address address =addressRepository.save(bc.getAddress());
             bc.setAddress(address);
+
         }
         if(existsBloodCenter(bc)==false)
         {
             return bloodCenterRepository.save(bc);
         }
-        return null;
+        else {
+            throw new BloodCenterAlreadyExists("Blood center you are trying to add already exists");
+        }
     }
 
 
