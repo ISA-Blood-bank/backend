@@ -41,6 +41,7 @@ public class BloodCenterController {
         return new ResponseEntity<>(bloodCenters, HttpStatus.OK);
     }
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BloodCenter> addBloodCenter(@RequestBody BloodCenter bc) {
         BloodCenter bcnew = bloodCenterSevice.addBloodCenter(bc);
         return new ResponseEntity<>(bcnew, HttpStatus.CREATED);

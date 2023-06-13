@@ -9,6 +9,7 @@ import com.bloodbank.BloodBank.service.RegisteredUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class MedicalStaffController {
     @Autowired
     private RegisteredUserService registeredUserService;
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<MedicalStaff> addMedicalStaff(@RequestBody MedicalStaffDto user) {
         RegistredUserDto registredUserDto= new RegistredUserDto(user.getId(),user.getName(),user.getSurname(),user.getJmbg(),
                 user.getGender(), user.getEmail(), user.getPassword1(), user.getPassword2(), user.getAddress());
@@ -40,6 +42,7 @@ public class MedicalStaffController {
         return new ResponseEntity<>(ms, HttpStatus.OK);
     }
     @GetMapping("/findBloodCenterByUserId/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Integer> getBloodCenterIdByUserId(@PathVariable("id") Integer id){
         int ms = medicalStaffService.getBloodCenterIdByUserId(id);
         return new ResponseEntity<>(ms, HttpStatus.OK);

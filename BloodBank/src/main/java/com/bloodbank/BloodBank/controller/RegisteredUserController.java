@@ -51,6 +51,7 @@ public class RegisteredUserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
     @PutMapping("/changePassword")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RegistredUser> changePassword(@RequestBody PasswordDto dto) {
         RegistredUser newUser = regUserService.ChangePassword(dto);
         return new ResponseEntity<>(newUser, HttpStatus.OK);

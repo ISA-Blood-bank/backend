@@ -36,6 +36,7 @@ public class AppointmentController {
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
     @GetMapping("/allCalendarFree/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CalendarFreeAppointmentDto>> getAllFreeForCalendar(@PathVariable("id") Integer id){
         List<CalendarFreeAppointmentDto> appointments = appointmentService.findByBloodCenterId(id);
         return new ResponseEntity<>(appointments, HttpStatus.OK);
