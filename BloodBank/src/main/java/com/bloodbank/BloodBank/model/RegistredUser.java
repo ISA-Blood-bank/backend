@@ -46,6 +46,9 @@ public class RegistredUser implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
+    @Version
+    private Integer version;
+
     public RegistredUser() {}
 
 
@@ -75,6 +78,26 @@ public class RegistredUser implements UserDetails {
         this.category = category;
         this.penalties = penalties;
         this.phone = phone;
+    }
+
+    public RegistredUser(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, String occupation, String jobOrSchoolInfo, float points, Category category, int penalties, String phone, boolean enabled, Timestamp lastPasswordResetDate, List<Role> roles, Integer version) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.jmbg = jmbg;
+        this.gender = gender;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.occupation = occupation;
+        this.jobOrSchoolInfo = jobOrSchoolInfo;
+        this.points = points;
+        this.category = category;
+        this.penalties = penalties;
+        this.phone = phone;
+        this.enabled = enabled;
+        this.lastPasswordResetDate = lastPasswordResetDate;
+        this.roles = roles;
     }
 
     public int getId() {
@@ -259,5 +282,11 @@ public class RegistredUser implements UserDetails {
                 '}';
     }
 
+    public Integer getVersion() {
+        return version;
+    }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 }

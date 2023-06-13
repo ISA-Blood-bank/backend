@@ -75,6 +75,7 @@ public class AdminsPredefinedAppointmentTest {
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                     appointmentService.newPredefinedAppointment(appointment1);
                     System.out.println("Dodato u Thread 1");
+
                 }
             }
         });
@@ -94,6 +95,7 @@ public class AdminsPredefinedAppointmentTest {
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                     appointmentService.newPredefinedAppointment(appointment2);
                     System.out.println("Dodato u Thread 2");
+
                 }
             }
         });
