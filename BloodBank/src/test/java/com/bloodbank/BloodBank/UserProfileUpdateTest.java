@@ -51,7 +51,8 @@ public class UserProfileUpdateTest {
                 RegistredUser updateUSer = registeredUserService.findByEmail("marko@gmail.com");
                 updateUSer.setName("Teodor");
                 try { Thread.sleep(3000); } catch (InterruptedException e) {}// thread uspavan na 3 sekunde da bi drugi thread mogao da izvrsi istu operaciju
-                    registeredUserService.updateRegisteredUser(updateUSer);// bacice ObjectOptimisticLockingFailureException
+                registeredUserService.updateRegisteredUser(updateUSer);// bacice ObjectOptimisticLockingFailureException
+                System.out.println("--------Izmenio u Thread 1");
             }
         });
         executor.submit(new Runnable() {

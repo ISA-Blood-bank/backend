@@ -58,7 +58,7 @@ public class AppointmentService {
         return appointmentRepository.findAll();
     }
 
-    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
     public Appointment scheduleAppointment(Appointment appointment) throws MessagingException, ObjectOptimisticLockingFailureException {
             //Appointment appointment = appointmentRepository.findById(appointmentId).orElseGet(null);
             if(appointment == null){
@@ -209,7 +209,7 @@ public class AppointmentService {
         return null;
     }
 
-    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
     public Appointment newPredefinedAppointment(Appointment appointment){
         if(isOverLaping(appointment)){
             throw new OverlappingAppointmentException("Appointment is overlapping with another one, choose different time.");

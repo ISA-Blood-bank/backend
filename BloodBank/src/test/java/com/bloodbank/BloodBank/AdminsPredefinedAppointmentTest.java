@@ -72,7 +72,7 @@ public class AdminsPredefinedAppointmentTest {
 				}*/
                 catch (JpaSystemException e){
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
-                    appointmentService.newPredefinedAppointment(appointment1);
+                    appointmentService.newPredefinedAppointment(appointment1);// bacice OverlappingAppointmentException
                 }
             }
         });
@@ -90,7 +90,7 @@ public class AdminsPredefinedAppointmentTest {
 				}*/
                 catch(JpaSystemException e){
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
-                    appointmentService.newPredefinedAppointment(appointment2);
+                    appointmentService.newPredefinedAppointment(appointment2); // bacice OverlappingAppointmentException
                 }
             }
         });
