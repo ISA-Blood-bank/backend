@@ -84,10 +84,47 @@ public class RegisteredUserService {
     public RegistredUser adminRegistrationHelper(RegistredUserDto dto ){
         dto.setPassword1("123");
         dto.setPassword2("123");
-       return addRegisteredUser(dto);
+       return addAdmin(dto);
     }
     @Transactional(readOnly = false,isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
-    public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto) throws AdminAlreadyExists{
+    public RegistredUser addAdmin(RegistredUserDto registredUserDto) throws AdminAlreadyExists{
+        if(jmbgNotUnique(registredUserDto) || emailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
+            throw new AdminAlreadyExists("Admin Already Exists");
+
+        }
+        RegistredUser registredUser = new RegistredUser(registredUserDto.getId(), registredUserDto.getName(), registredUserDto.getSurname(),
+                registredUserDto.getJmbg(), registredUserDto.getGender(), registredUserDto.getEmail(), passwordEncoder.encode(registredUserDto.getPassword1()), registredUserDto.getAddress(),
+                registredUserDto.getOccupation(),registredUserDto.getJobOrSchoolInfo(), registredUserDto.getPoints(), registredUserDto.getCategory(), registredUserDto.getPenalties(), registredUserDto.getPhone());
+        if(addressExists(registredUser)){
+            registredUser.setAddress(identical);
+        }else{
+            Address addresWithId = addressRepository.save(registredUser.getAddress());
+            registredUser.setAddress(addresWithId);
+        }
+        registredUser.setCategory(Category.REGULAR);
+        registredUser.setPoints((float)0.0);
+        registredUser.setPenalties(0);
+        registredUser.setEnabled(false);
+        registredUser.setPasswordChanged(false);
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        registredUser.setLastPasswordResetDate(now);
+        List<Role> roles = roleService.findByName("ROLE_ADMIN");
+        registredUser.setRoles(roles);
+        RegistredUser saved = regUserRep.save(registredUser);
+
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), saved);
+        confirmationTokenService.save(confirmationToken);
+
+        String link = "http://localhost:8080/auth/confirm?token=" + token;
+        emailService.send(
+                saved.getEmail(),
+                buildEmail(saved.getName(), link));
+
+        return saved;
+    }
+      public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto) throws AdminAlreadyExists{
         if(jmbgNotUnique(registredUserDto) || emailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
            throw new AdminAlreadyExists("Admin Already Exists");
 

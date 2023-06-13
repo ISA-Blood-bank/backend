@@ -51,7 +51,7 @@ public class AdminRegistration {
             public void run() {
                 try {
                     System.out.println("Started Thread 1");
-                    registeredUserService.addRegisteredUser(registredUser1);//bacice custom exeption
+                    registeredUserService.addAdmin(registredUser1);//bacice custom exeption
                 }
                 /*catch (Throwable t) {
 					System.out.println("Exception in Thread 1: " + t.getClass());
@@ -59,7 +59,7 @@ public class AdminRegistration {
 				}*/
                 catch (JpaSystemException | CannotAcquireLockException e){
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
-                    registeredUserService.addRegisteredUser(registredUser2);
+                    registeredUserService.addAdmin(registredUser2);
                     System.out.println("Added in Thread 1");
                 }
             }
@@ -71,7 +71,7 @@ public class AdminRegistration {
             public void run() {
                 try {
                     System.out.println("Started Thread 2");
-                    registeredUserService.addRegisteredUser(registredUser2);
+                    registeredUserService.addAdmin(registredUser2);
                 }
               /*  catch (Throwable t) {
 					System.out.println("Exception in Thread 2: " + t.getClass());
@@ -79,7 +79,7 @@ public class AdminRegistration {
 				}*/
                 catch (JpaSystemException  | CannotAcquireLockException e){
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
-                    registeredUserService.addRegisteredUser(registredUser2);
+                    registeredUserService.addAdmin(registredUser2);
                     System.out.println("Added in Thread 2");
                 }
             }
