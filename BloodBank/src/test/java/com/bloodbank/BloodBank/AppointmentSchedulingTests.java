@@ -77,7 +77,7 @@ public class AppointmentSchedulingTests {
                 }
             }
         });
-        executor.submit(new Runnable() {
+        Future<?> future2 = executor.submit(new Runnable() {
 
             @SneakyThrows
             @Override
@@ -98,6 +98,7 @@ public class AppointmentSchedulingTests {
         });
         try {
             future1.get(); // podize ExecutionException za bilo koji izuzetak iz prvog child threada
+            future2.get();
         } catch (ExecutionException e) {
             System.out.println("Exception from thread " + e.getCause().getClass()); // u pitanju je bas ObjectOptimisticLockingFailureException
             throw e.getCause();

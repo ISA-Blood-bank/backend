@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -70,13 +71,14 @@ public class AdminsPredefinedAppointmentTest {
 					System.out.println("Exception in Thread 1: " + t.getClass());
 					throw t;
 				}*/
-                catch (JpaSystemException e){
+                catch (JpaSystemException | CannotAcquireLockException e){
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                     appointmentService.newPredefinedAppointment(appointment1);
+                    System.out.println("Dodato u Thread 1");
                 }
             }
         });
-        executor.submit(new Runnable() {
+        Future<?> future2 = executor.submit(new Runnable() {
 
             @Override
             public void run() {
@@ -88,14 +90,16 @@ public class AdminsPredefinedAppointmentTest {
 					System.out.println("Exception in Thread 2: " + t.getClass());
 					throw t;
 				}*/
-                catch(JpaSystemException e){
+                catch(JpaSystemException | CannotAcquireLockException e){
                     try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                     appointmentService.newPredefinedAppointment(appointment2);
+                    System.out.println("Dodato u Thread 2");
                 }
             }
         });
         try {
             future1.get(); // podize ExecutionException za bilo koji izuzetak iz prvog child threada
+            future2.get(); // podize ExecutionException za bilo koji izuzetak iz drugog child threada
         } catch (ExecutionException e) {
             System.out.println("Exception from thread " + e.getCause().getClass());
             throw e.getCause();
