@@ -1,5 +1,6 @@
 package com.bloodbank.BloodBank.service;
 
+import com.bloodbank.BloodBank.exceptions.AdminAlreadyExists;
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.PasswordDto;
 import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
@@ -86,9 +87,10 @@ public class RegisteredUserService {
        return addRegisteredUser(dto);
     }
     @Transactional(readOnly = false,isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
-    public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto){
+    public RegistredUser addRegisteredUser(RegistredUserDto registredUserDto) throws AdminAlreadyExists{
         if(jmbgNotUnique(registredUserDto) || emailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
-            return null;
+           throw new AdminAlreadyExists("Admin Already Exists");
+
         }
         RegistredUser registredUser = new RegistredUser(registredUserDto.getId(), registredUserDto.getName(), registredUserDto.getSurname(),
                 registredUserDto.getJmbg(), registredUserDto.getGender(), registredUserDto.getEmail(), passwordEncoder.encode(registredUserDto.getPassword1()), registredUserDto.getAddress(),
