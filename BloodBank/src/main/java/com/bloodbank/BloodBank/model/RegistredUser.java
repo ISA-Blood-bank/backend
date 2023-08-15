@@ -2,11 +2,16 @@ package com.bloodbank.BloodBank.model;
 
 import com.bloodbank.BloodBank.model.enums.Category;
 import com.bloodbank.BloodBank.model.enums.Gender;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-public class RegistredUser{
+public class RegistredUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +35,32 @@ public class RegistredUser{
 
     private int penalties;
 
+    private String phone;
+    private boolean enabled;
+    @Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
+    @ManyToMany(fetch = FetchType.EAGER)
+
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
+
     public RegistredUser() {}
 
-    public RegistredUser(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, String occupation, String jobOrSchoolInfo, float points, Category category, int penalties) {
+
+
+
+
+
+
+
+
+
+
+
+
+    public RegistredUser(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, String occupation, String jobOrSchoolInfo, float points, Category category, int penalties, String phone) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -46,6 +74,7 @@ public class RegistredUser{
         this.points = points;
         this.category = category;
         this.penalties = penalties;
+        this.phone = phone;
     }
 
     public int getId() {
@@ -96,8 +125,42 @@ public class RegistredUser{
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public void setPassword(String password) {
@@ -152,6 +215,30 @@ public class RegistredUser{
         this.penalties = penalties;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
     @Override
     public String toString() {
         return "RegistredUser{" +
@@ -168,6 +255,9 @@ public class RegistredUser{
                 ", points=" + points +
                 ", category=" + category +
                 ", penalties=" + penalties +
+                ", phone='" + phone + '\'' +
                 '}';
     }
+
+
 }

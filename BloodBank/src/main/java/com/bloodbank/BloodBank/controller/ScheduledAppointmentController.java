@@ -1,5 +1,6 @@
 package com.bloodbank.BloodBank.controller;
 
+import com.bloodbank.BloodBank.model.Appointment;
 import com.bloodbank.BloodBank.model.ScheduledAppointment;
 import com.bloodbank.BloodBank.service.ScheduledAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,36 +11,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "api/scheduledAppointments")
 public class ScheduledAppointmentController {
+
     @Autowired
     private ScheduledAppointmentService scheduledAppointmentService;
 
-    @GetMapping("/all")
+    @GetMapping("/getAllForLoggedUser")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<ScheduledAppointment>> getAll(){
-        List<ScheduledAppointment> appointments = scheduledAppointmentService.getAll();
-        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    public ResponseEntity<List<ScheduledAppointment>> findAllForLoggedUser(){
+        List<ScheduledAppointment> list = scheduledAppointmentService.findAllByUserId();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @PutMapping("/cancel/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ScheduledAppointment> getById(@PathVariable("id") Integer id){
-        ScheduledAppointment appointment = scheduledAppointmentService.getById(id);
-        if(appointment == null){
-            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<ScheduledAppointment> cancelAppointment(@PathVariable("id") Integer id) {
+        ScheduledAppointment canceled = scheduledAppointmentService.cancelAppointment(id);
+        if(canceled == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        return  new ResponseEntity<>(appointment, HttpStatus.OK);
+        return new ResponseEntity<>(canceled, HttpStatus.OK);
     }
-/*
-    @GetMapping("/medStaff/{medicalStaffId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<ScheduledAppointment>> getByMedicalStaffId(@PathVariable("medicalStaffId") Integer medicalStaffId){
-        List<ScheduledAppointment> appointments = scheduledAppointmentService.getAllByMedicalStaffId(medicalStaffId);
-        return  new ResponseEntity<>(appointments, HttpStatus.OK);
-    }*/
-
 }
+
