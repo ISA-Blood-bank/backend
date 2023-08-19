@@ -39,6 +39,8 @@ public class RegistredUser implements UserDetails {
     private boolean enabled;
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
+
+    private float weight;
     @ManyToMany(fetch = FetchType.EAGER)
 
     @JoinTable(name = "user_role",
@@ -48,19 +50,7 @@ public class RegistredUser implements UserDetails {
 
     public RegistredUser() {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-    public RegistredUser(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, String occupation, String jobOrSchoolInfo, float points, Category category, int penalties, String phone) {
+    public RegistredUser(int id, String name, String surname, String jmbg, Gender gender, String email, String password, Address address, String occupation, String jobOrSchoolInfo, float points, Category category, int penalties, String phone, float weight) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -75,6 +65,7 @@ public class RegistredUser implements UserDetails {
         this.category = category;
         this.penalties = penalties;
         this.phone = phone;
+        this.weight = weight;
     }
 
     public int getId() {
@@ -111,6 +102,14 @@ public class RegistredUser implements UserDetails {
 
     public Gender getGender() {
         return gender;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 
     public void setGender(Gender gender) {

@@ -2,6 +2,7 @@ package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.Questionnaire;
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.enums.Gender;
 import com.bloodbank.BloodBank.repository.QuestionnaireRepository;
 import com.bloodbank.BloodBank.security.auth.TokenBasedAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,40 @@ public class QuestionnaireService {
         }
         questionnaire.setRegistredUser(user);
         return questionnaireRepository.save(questionnaire);
+    }
+
+    private boolean userExtractedATooth(Integer id){
+        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
+        return q.isQuestion10();
+    }
+
+    private boolean userHasAllergies(Integer id){
+        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
+        return q.isQuestion18();
+    }
+
+    private boolean userGotTattooed(Integer id){
+        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
+        return q.isQuestion20();
+    }
+
+    private boolean userHasCold(Integer id){
+        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
+        return q.isQuestion11();
+    }
+
+    private boolean userHasMenstruation(Integer id){
+        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
+        RegistredUser ru = q.getRegistredUser();
+        if(ru.getGender() == Gender.FEMALE){
+            return  q.isQuestion25();
+        }
+        return false;
+    }
+
+    private boolean userTakesMedication(Integer id){
+        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
+
+        return (q.isQuestion6() || q.isQuestion7() || q.isQuestion8());
     }
 }

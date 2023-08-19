@@ -74,9 +74,22 @@ public class RegisteredUserService {
         if(jmbgNotUnique(registredUserDto) || emailNotUnique(registredUserDto) || incorrectPassword(registredUserDto)){
             return null;
         }
-        RegistredUser registredUser = new RegistredUser(registredUserDto.getId(), registredUserDto.getName(), registredUserDto.getSurname(),
-                registredUserDto.getJmbg(), registredUserDto.getGender(), registredUserDto.getEmail(), passwordEncoder.encode(registredUserDto.getPassword1()), registredUserDto.getAddress(),
-                registredUserDto.getOccupation(),registredUserDto.getJobOrSchoolInfo(), registredUserDto.getPoints(), registredUserDto.getCategory(), registredUserDto.getPenalties(), registredUserDto.getPhone());
+        RegistredUser registredUser = new RegistredUser(
+                registredUserDto.getId(),
+                registredUserDto.getName(),
+                registredUserDto.getSurname(),
+                registredUserDto.getJmbg(),
+                registredUserDto.getGender(),
+                registredUserDto.getEmail(),
+                passwordEncoder.encode(registredUserDto.getPassword1()),
+                registredUserDto.getAddress(),
+                registredUserDto.getOccupation(),
+                registredUserDto.getJobOrSchoolInfo(),
+                registredUserDto.getPoints(),
+                registredUserDto.getCategory(),
+                registredUserDto.getPenalties(),
+                registredUserDto.getPhone(),
+                registredUserDto.getWeight());
         if(addressExists(registredUser)){
             registredUser.setAddress(identical);
         }else{
@@ -207,5 +220,11 @@ public class RegisteredUserService {
             r.setPenalties(0);
             regUserRep.save(r);
         }
+    }
+
+    public void givePenalty(Integer id){
+        RegistredUser ru = findOne(id);
+        ru.setPenalties(ru.getPenalties() + 1);
+        regUserRep.save(ru);
     }
 }

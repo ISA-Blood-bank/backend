@@ -29,6 +29,8 @@ public class RegistredUserDto {
 
     private int penalties;
 
+    private float weight;
+
     private String phone;
 
     public RegistredUserDto(RegistredUser registredUser) {
@@ -38,6 +40,14 @@ public class RegistredUserDto {
 
     public RegistredUserDto(){
 
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 
     public int getId() {

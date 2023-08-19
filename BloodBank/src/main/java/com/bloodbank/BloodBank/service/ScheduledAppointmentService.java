@@ -1,10 +1,9 @@
 package com.bloodbank.BloodBank.service;
 
-import com.bloodbank.BloodBank.model.Appointment;
-import com.bloodbank.BloodBank.model.RegistredUser;
-import com.bloodbank.BloodBank.model.ScheduledAppointment;
-import com.bloodbank.BloodBank.repository.AppointmentRepository;
-import com.bloodbank.BloodBank.repository.ScheduledAppointmentRepository;
+import com.bloodbank.BloodBank.model.*;
+import com.bloodbank.BloodBank.model.dto.AdditionalInfoDto;
+import com.bloodbank.BloodBank.model.dto.ScheduledAppointmentDto;
+import com.bloodbank.BloodBank.repository.*;
 import com.bloodbank.BloodBank.security.auth.TokenBasedAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +19,31 @@ public class ScheduledAppointmentService {
     private ScheduledAppointmentRepository scheduledAppointmentRepository;
 
     @Autowired
+    private RegisteredUserService registeredUserService;
+
+    @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private BloodCenterSevice bloodCenterSevice;
+
+    @Autowired
+    private VisitsRepository visitsRepository;
+
+    @Autowired
+    private BloodRepository bloodRepository;
+
+    @Autowired
+    private QuestionnaireRepository questionnaireRepository;
+
+    @Autowired
+    private MedicalStaffService medicalStaffService;
+
+    @Autowired
+    private AdditionalInfoRepository additionalInfoRepository;
+
+    @Autowired
+    private  AppointmentService appointmentService;
     public List<ScheduledAppointment> findAllByUserId(){
         TokenBasedAuthentication authentication = (TokenBasedAuthentication) SecurityContextHolder.getContext().getAuthentication();
         RegistredUser user = (RegistredUser) authentication.getPrincipal();
@@ -33,6 +56,10 @@ public class ScheduledAppointmentService {
             }
         }
         return future;
+    }
+
+    public ScheduledAppointment findById(Integer id){
+        return  scheduledAppointmentRepository.findById(id).orElseGet(null);
     }
 
     public ScheduledAppointment cancelAppointment(int id){
@@ -58,5 +85,74 @@ public class ScheduledAppointmentService {
             return true;
         }
         return false;
+    }
+
+    public ScheduledAppointment patientNotCome(ScheduledAppointmentDto scheduledAppointmentDto){
+        registeredUserService.givePenalty(scheduledAppointmentDto.getRegistredUesrId());
+        Appointment appointment = appointmentRepository.findById(scheduledAppointmentDto.getAppointmentId()).orElseGet(null);
+        ScheduledAppointment sch = new ScheduledAppointment(
+                scheduledAppointmentDto.getId(),
+                appointment,
+                registeredUserService.findOne(scheduledAppointmentDto.getRegistredUesrId()),
+                scheduledAppointmentDto.isPassed(),
+                scheduledAppointmentDto.isCanceled()
+        );
+
+        scheduledAppointmentRepository.save(sch);
+        return sch;
+    }
+
+    public Visits addVisitsForUser(ScheduledAppointmentDto dto){
+        Visits visit = new Visits(
+                registeredUserService.findOne(dto.getRegistredUesrId()),
+                bloodCenterSevice.findOne(dto.getId())
+        );
+
+        visitsRepository.save(visit);
+        return visit;
+    }
+
+    public Blood addBloodToCentre( AdditionalInfoDto additionalInfoDto){
+        ScheduledAppointmentDto dto = additionalInfoDto.getScheduledAppointmentDto();
+        Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseGet(null);
+        Blood blood = bloodRepository.getBloodByBloodCenterIdAndBloodType(
+                appointment.getBloodCenter().getId(),
+                additionalInfoDto.getBloodType()
+        );
+
+        blood.setQuantity(blood.getQuantity() + 1); //racuna se jedinica krvi
+
+        bloodRepository.save(blood);
+
+        return blood;
+    }
+
+    public AdditionalInformation saveAdditionalInfo(AdditionalInfoDto additionalInfoDto){
+        AdditionalInformation info =  new AdditionalInformation(
+                additionalInfoDto.getId(),
+                questionnaireRepository.findById(additionalInfoDto.getQuestionaireId()).orElseGet(null),
+                additionalInfoDto.getBloodType(),
+                medicalStaffService.findById(additionalInfoDto.getMedicalStaffId()),
+                additionalInfoDto.isBakarSulfat(),
+                additionalInfoDto.isNormalLevel(),
+                additionalInfoDto.isHighLevel(),
+                additionalInfoDto.getHemoglobinometar(),
+                additionalInfoDto.getValue(),
+                additionalInfoDto.isLungs(),
+                additionalInfoDto.isHeart(),
+                additionalInfoDto.getTA(),
+                additionalInfoDto.getTT(),
+                additionalInfoDto.getTT(),
+                additionalInfoDto.getBagType(),
+                additionalInfoDto.getReasonForRejection(),
+                additionalInfoDto.getReasonForAbort(),
+                additionalInfoDto.getStartTime(),
+                additionalInfoDto.getEndTime(),
+                additionalInfoDto.isAccepted()
+        );
+
+        additionalInfoRepository.save(info);
+
+        return info;
     }
 }

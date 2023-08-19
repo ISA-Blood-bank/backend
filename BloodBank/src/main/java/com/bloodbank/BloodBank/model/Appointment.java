@@ -18,7 +18,7 @@ public class Appointment {
     private BloodCenter bloodCenter;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "medical_staff_id")
-    private RegistredUser medicalStaff;
+    private MedicalStaff medicalStaff;
 
     @Version
     private Integer version;
@@ -26,7 +26,7 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(int id, LocalDateTime start, float duration, boolean available, BloodCenter bloodCenter, RegistredUser medicalStaff) {
+    public Appointment(int id, LocalDateTime start, float duration, boolean available, BloodCenter bloodCenter, MedicalStaff medicalStaff) {
         this.id = id;
         this.start = start;
         this.duration = duration;
@@ -35,7 +35,7 @@ public class Appointment {
         this.medicalStaff = medicalStaff;
     }
 
-    public Appointment(int id, LocalDateTime start, float duration, boolean available, BloodCenter bloodCenter, RegistredUser medicalStaff, Integer version) {
+    public Appointment(int id, LocalDateTime start, float duration, boolean available, BloodCenter bloodCenter, MedicalStaff medicalStaff, Integer version) {
         this.id = id;
         this.start = start;
         this.duration = duration;
@@ -64,7 +64,7 @@ public class Appointment {
         return bloodCenter;
     }
 
-    public RegistredUser getMedicalStaff() {
+    public MedicalStaff getMedicalStaff() {
         return medicalStaff;
     }
 
@@ -88,7 +88,7 @@ public class Appointment {
         this.bloodCenter = bloodCenter;
     }
 
-    public void setMedicalStaff(RegistredUser medicalStaff) {
+    public void setMedicalStaff(MedicalStaff medicalStaff) {
         this.medicalStaff = medicalStaff;
     }
 

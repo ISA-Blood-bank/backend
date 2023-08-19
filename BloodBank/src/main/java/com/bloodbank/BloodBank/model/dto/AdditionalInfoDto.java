@@ -1,22 +1,14 @@
-package com.bloodbank.BloodBank.model;
+package com.bloodbank.BloodBank.model.dto;
 
 import com.bloodbank.BloodBank.model.enums.BloodType;
 
-import javax.persistence.*;
 import java.time.LocalTime;
 
-@Entity
-public class AdditionalInformation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AdditionalInfoDto {
     private int id;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "questionaire_id", referencedColumnName = "id")
-    private  Questionnaire questionnaire;
+    private int questionaireId;
     private BloodType bloodType;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "medical_staff_id", referencedColumnName = "id")
-    private MedicalStaff medicalStaff;
+    private int medicalStaffId;
     private boolean bakarSulfat;
     private boolean normalLevel;
     private boolean highLevel;
@@ -34,14 +26,13 @@ public class AdditionalInformation {
     private LocalTime  endTime;
     private boolean  accepted;
 
-    public AdditionalInformation() {
-    }
+    private ScheduledAppointmentDto scheduledAppointmentDto;
 
-    public AdditionalInformation(int id, Questionnaire questionnaire, BloodType bloodType, MedicalStaff medicalStaff, boolean bakarSulfat, boolean normalLevel, boolean highLevel, String hemoglobinometar, String value, boolean lungs, boolean heart, String TA, String TT, String TV, String bagType, String reasonForRejection, String reasonForAbort, LocalTime startTime, LocalTime endTime, boolean accepted) {
+    public AdditionalInfoDto(int id, int questionaireId, BloodType bloodType, int medicalStaffId, boolean bakarSulfat, boolean normalLevel, boolean highLevel, String hemoglobinometar, String value, boolean lungs, boolean heart, String TA, String TT, String TV, String bagType, String reasonForRejection, String reasonForAbort, LocalTime startTime, LocalTime endTime, boolean accepted, ScheduledAppointmentDto scheduledAppointmentDto) {
         this.id = id;
-        this.questionnaire = questionnaire;
+        this.questionaireId = questionaireId;
         this.bloodType = bloodType;
-        this.medicalStaff = medicalStaff;
+        this.medicalStaffId = medicalStaffId;
         this.bakarSulfat = bakarSulfat;
         this.normalLevel = normalLevel;
         this.highLevel = highLevel;
@@ -58,6 +49,10 @@ public class AdditionalInformation {
         this.startTime = startTime;
         this.endTime = endTime;
         this.accepted = accepted;
+        this.scheduledAppointmentDto = scheduledAppointmentDto;
+    }
+
+    public AdditionalInfoDto() {
     }
 
     public int getId() {
@@ -68,12 +63,12 @@ public class AdditionalInformation {
         this.id = id;
     }
 
-    public Questionnaire getQuestionnaire() {
-        return questionnaire;
+    public int getQuestionaireId() {
+        return questionaireId;
     }
 
-    public void setQuestionnaire(Questionnaire questionnaire) {
-        this.questionnaire = questionnaire;
+    public void setQuestionaireId(int questionaireId) {
+        this.questionaireId = questionaireId;
     }
 
     public BloodType getBloodType() {
@@ -84,12 +79,12 @@ public class AdditionalInformation {
         this.bloodType = bloodType;
     }
 
-    public MedicalStaff getMedicalStaff() {
-        return medicalStaff;
+    public int getMedicalStaffId() {
+        return medicalStaffId;
     }
 
-    public void setMedicalStaff(MedicalStaff medicalStaff) {
-        this.medicalStaff = medicalStaff;
+    public void setMedicalStaffId(int medicalStaffId) {
+        this.medicalStaffId = medicalStaffId;
     }
 
     public boolean isBakarSulfat() {
@@ -218,5 +213,13 @@ public class AdditionalInformation {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public ScheduledAppointmentDto getScheduledAppointmentDto() {
+        return scheduledAppointmentDto;
+    }
+
+    public void setScheduledAppointmentDto(ScheduledAppointmentDto scheduledAppointmentDto) {
+        this.scheduledAppointmentDto = scheduledAppointmentDto;
     }
 }

@@ -1,28 +1,28 @@
 package com.bloodbank.BloodBank.model;
 
-import com.bloodbank.BloodBank.model.enums.BloodType;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Blood implements Serializable {
+public class Visits implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private BloodType type;
-    private float quantity;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "registred_user_id", referencedColumnName = "id")
+    private RegistredUser user;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "blood_center_id", referencedColumnName = "id")
     private BloodCenter bloodCenter;
 
-    public Blood() {
+    public Visits() {
     }
 
-    public Blood(int id, BloodType type, float quantity, BloodCenter bloodCenter) {
-        this.id = id;
-        this.type = type;
-        this.quantity = quantity;
+    public Visits(RegistredUser user, BloodCenter bloodCenter) {
+        this.user = user;
         this.bloodCenter = bloodCenter;
     }
 
@@ -30,24 +30,16 @@ public class Blood implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public BloodType getType() {
-        return type;
+    public RegistredUser getUser() {
+        return user;
     }
 
-    public void setType(BloodType type) {
-        this.type = type;
-    }
-
-    public float getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(float quantity) {
-        this.quantity = quantity;
+    public void setUser(RegistredUser user) {
+        this.user = user;
     }
 
     public BloodCenter getBloodCenter() {

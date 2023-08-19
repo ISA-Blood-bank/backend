@@ -130,8 +130,8 @@ public class AppointmentService {
     public Appointment createNewAppointment(AppointmentDto appointment){
         MedicalStaff ms = medicalStaffRepository.getById(appointment.getMedicalStaffId());
         BloodCenter bc = ms.getBloodCenter();
-        RegistredUser ru = userRepository.getById(appointment.getMedicalStaffId());
-        Appointment appointment1 = new Appointment(appointment.getId(), appointment.getStart(),appointment.getDuration(),true,bc,ru);
+        //RegistredUser ru = userRepository.getById(appointment.getMedicalStaffId());
+        Appointment appointment1 = new Appointment(appointment.getId(), appointment.getStart(),appointment.getDuration(),true,bc,ms);
         return appointmentRepository.save(appointment1);
     }
     public List<Appointment> getAvailableAppointments(RecommendDto recommendDto){
@@ -155,4 +155,5 @@ public class AppointmentService {
         }
         return true;
     }
+
 }
