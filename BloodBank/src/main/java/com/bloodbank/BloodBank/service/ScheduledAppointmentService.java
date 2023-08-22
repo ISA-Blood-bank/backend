@@ -3,6 +3,7 @@ package com.bloodbank.BloodBank.service;
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.AdditionalInfoDto;
 import com.bloodbank.BloodBank.model.dto.ScheduledAppointmentDto;
+import com.bloodbank.BloodBank.model.dto.ScheduledDisplayDto;
 import com.bloodbank.BloodBank.repository.*;
 import com.bloodbank.BloodBank.security.auth.TokenBasedAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,9 +103,9 @@ public class ScheduledAppointmentService {
         return sch;
     }
 
-    public Visits addVisitsForUser(ScheduledAppointmentDto dto){
+    public Visits addVisitsForUser(ScheduledAppointment dto){
         Visits visit = new Visits(
-                registeredUserService.findOne(dto.getRegistredUesrId()),
+                dto.getUser(),
                 bloodCenterSevice.findOne(dto.getId())
         );
 
@@ -113,8 +114,9 @@ public class ScheduledAppointmentService {
     }
 
     public Blood addBloodToCentre( AdditionalInfoDto additionalInfoDto){
-        ScheduledAppointmentDto dto = additionalInfoDto.getScheduledAppointmentDto();
-        Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseGet(null);
+        Integer schId = additionalInfoDto.getScheduledAppointmentId();
+        ScheduledAppointment sch = scheduledAppointmentRepository.findById(schId).orElseGet(null);
+        Appointment appointment = sch.getAppointment();
         Blood blood = bloodRepository.getBloodByBloodCenterIdAndBloodType(
                 appointment.getBloodCenter().getId(),
                 additionalInfoDto.getBloodType()
@@ -146,8 +148,8 @@ public class ScheduledAppointmentService {
                 additionalInfoDto.getBagType(),
                 additionalInfoDto.getReasonForRejection(),
                 additionalInfoDto.getReasonForAbort(),
-                additionalInfoDto.getStartTime(),
-                additionalInfoDto.getEndTime(),
+                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(1),
                 additionalInfoDto.isAccepted()
         );
 
@@ -155,4 +157,29 @@ public class ScheduledAppointmentService {
 
         return info;
     }
+    public List<ScheduledDisplayDto> getByBloodCenterId(Integer bloodCenterId){
+        List<ScheduledAppointment> scheduledAppointments =
+                scheduledAppointmentRepository.findAllNonCanceledAndBloodCenterId(bloodCenterId);
+
+        List<ScheduledDisplayDto> displayDtos = new ArrayList<ScheduledDisplayDto>();
+
+        for(ScheduledAppointment s: scheduledAppointments){
+            displayDtos.add(new ScheduledDisplayDto(
+                    s.getId(),
+                    s.getUser().getName(),
+                    s.getUser().getSurname(),
+                    s.getUser().getEmail(),
+                    s.getAppointment().getStart(),
+                    s.isPassed(),
+                    s.isCanceled(),
+                    s.getAppointment().getDuration(),
+                    s.getUser().getId()
+            ));
+        }
+
+        return displayDtos;
+    }
+
+
+
 }

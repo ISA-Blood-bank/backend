@@ -31,4 +31,15 @@ insert into scheduled_appointment (appointment_id, user_id, passed, canceled) va
 insert into scheduled_appointment (appointment_id, user_id, passed, canceled) values (1, 1, false, false);
 insert into appointment_report (appointment_id, content, can_give_blood) values (1, 'Super', true);
 insert into appointment_report (appointment_id, content, can_give_blood) values (2, 'Ekstra', true);
+
+insert into visits(registred_user_id, blood_center_id) values (1, 1)
+
+insert into blood(type, quantity, blood_center_id) values (0, 500, 1);
+insert into blood(type, quantity, blood_center_id) values (1, 500, 1);
+insert into blood(type, quantity, blood_center_id) values (2, 500, 1);
+insert into blood(type, quantity, blood_center_id) values (3, 500, 1);
+insert into blood(type, quantity, blood_center_id) values (4, 500, 1);
+insert into blood(type, quantity, blood_center_id) values (5, 500, 1);
+insert into blood(type, quantity, blood_center_id) values (6, 500, 1);
+insert into blood(type, quantity, blood_center_id) values (7, 500, 1);
 commit;

@@ -127,8 +127,10 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
 
     }
+
+    @Transactional(readOnly = false)
     public Appointment createNewAppointment(AppointmentDto appointment){
-        MedicalStaff ms = medicalStaffRepository.getById(appointment.getMedicalStaffId());
+        MedicalStaff ms = medicalStaffRepository.findById(appointment.getMedicalStaffId()).orElseGet(null);
         BloodCenter bc = ms.getBloodCenter();
         //RegistredUser ru = userRepository.getById(appointment.getMedicalStaffId());
         Appointment appointment1 = new Appointment(appointment.getId(), appointment.getStart(),appointment.getDuration(),true,bc,ms);

@@ -3,8 +3,10 @@ package com.bloodbank.BloodBank.model;
 import com.bloodbank.BloodBank.model.enums.Gender;
 
 import javax.persistence.*;
+import java.io.Serializable;
+
 @Entity
-public class MedicalStaff{
+public class MedicalStaff implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

@@ -38,38 +38,51 @@ public class QuestionnaireService {
         return questionnaireRepository.save(questionnaire);
     }
 
-    private boolean userExtractedATooth(Integer id){
-        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
-        return q.isQuestion10();
+    public boolean userExtractedATooth(Integer id){
+        List<Questionnaire> q = questionnaireRepository.findTopByRegistredUser_IdOrderByDateDateDesc(id);
+        Questionnaire q1 = q.get(0);
+        return q1.isQuestion10();
     }
 
-    private boolean userHasAllergies(Integer id){
-        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
-        return q.isQuestion18();
+    public boolean userHasAllergies(Integer id){
+        List<Questionnaire> q = questionnaireRepository.findTopByRegistredUser_IdOrderByDateDateDesc(id);
+        Questionnaire q1 = q.get(0);
+        return q1.isQuestion18();
     }
 
-    private boolean userGotTattooed(Integer id){
-        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
-        return q.isQuestion20();
+    public boolean userGotTattooed(Integer id){
+        List<Questionnaire> q = questionnaireRepository.findTopByRegistredUser_IdOrderByDateDateDesc(id);
+        Questionnaire q1 = q.get(0);
+        return q1.isQuestion20();
     }
 
-    private boolean userHasCold(Integer id){
-        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
-        return q.isQuestion11();
+    public boolean userHasCold(Integer id){
+        List<Questionnaire> q = questionnaireRepository.findTopByRegistredUser_IdOrderByDateDateDesc(id);
+        Questionnaire q1 = q.get(0);
+        return q1.isQuestion11();
     }
 
-    private boolean userHasMenstruation(Integer id){
-        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
-        RegistredUser ru = q.getRegistredUser();
+    public boolean userHasMenstruation(Integer id){
+        List<Questionnaire> q = questionnaireRepository.findTopByRegistredUser_IdOrderByDateDateDesc(id);
+        Questionnaire q1 = q.get(0);
+        RegistredUser ru = q1.getRegistredUser();
         if(ru.getGender() == Gender.FEMALE){
-            return  q.isQuestion25();
+            return  q1.isQuestion25();
         }
         return false;
     }
 
-    private boolean userTakesMedication(Integer id){
-        Questionnaire q = questionnaireRepository.findById(id).orElseGet(null);
+    public boolean userTakesMedication(Integer id){
+        List<Questionnaire> q = questionnaireRepository.findTopByRegistredUser_IdOrderByDateDateDesc(id);
+        Questionnaire q1 = q.get(0);
 
-        return (q.isQuestion6() || q.isQuestion7() || q.isQuestion8());
+        return (q1.isQuestion6() || q1.isQuestion7() || q1.isQuestion8());
     }
+    public Integer getQuestionnaireIdByUserId(Integer id){
+        List<Questionnaire> q = questionnaireRepository.findTopByRegistredUser_IdOrderByDateDateDesc(id);
+        Questionnaire q1 = q.get(0);
+
+        return q1.getId();
+    }
+
 }

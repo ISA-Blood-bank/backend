@@ -3,6 +3,7 @@ package com.bloodbank.BloodBank.model;
 import com.bloodbank.BloodBank.model.enums.BloodType;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -30,14 +31,14 @@ public class AdditionalInformation {
     private String  bagType;
     private String  reasonForRejection;
     private String  reasonForAbort;
-    private LocalTime startTime;
-    private LocalTime  endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime  endTime;
     private boolean  accepted;
 
     public AdditionalInformation() {
     }
 
-    public AdditionalInformation(int id, Questionnaire questionnaire, BloodType bloodType, MedicalStaff medicalStaff, boolean bakarSulfat, boolean normalLevel, boolean highLevel, String hemoglobinometar, String value, boolean lungs, boolean heart, String TA, String TT, String TV, String bagType, String reasonForRejection, String reasonForAbort, LocalTime startTime, LocalTime endTime, boolean accepted) {
+    public AdditionalInformation(int id, Questionnaire questionnaire, BloodType bloodType, MedicalStaff medicalStaff, boolean bakarSulfat, boolean normalLevel, boolean highLevel, String hemoglobinometar, String value, boolean lungs, boolean heart, String TA, String TT, String TV, String bagType, String reasonForRejection, String reasonForAbort, LocalDateTime startTime, LocalDateTime endTime, boolean accepted) {
         this.id = id;
         this.questionnaire = questionnaire;
         this.bloodType = bloodType;
@@ -196,19 +197,19 @@ public class AdditionalInformation {
         this.reasonForAbort = reasonForAbort;
     }
 
-    public LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 

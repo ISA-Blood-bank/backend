@@ -23,4 +23,46 @@ public class QuestionnaireController {
         Questionnaire newQuestionnaire = questionnaireService.save(questionnaire);
         return new ResponseEntity<>(newQuestionnaire, HttpStatus.OK);
     }
+
+    @GetMapping("/extractedTooth/{id}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<Boolean> userHaveExtractedTooth(@PathVariable("id") Integer id){
+        boolean extracted = questionnaireService.userExtractedATooth(id);
+        return new ResponseEntity<>(extracted, HttpStatus.OK);
+    }
+
+    @GetMapping("/hasAllergies/{id}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<Boolean> userHasAllergies(@PathVariable("id") Integer id){
+        boolean extracted = questionnaireService.userHasAllergies(id);
+        return new ResponseEntity<>(extracted, HttpStatus.OK);
+    }
+
+    @GetMapping("/gotTattooed/{id}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<Boolean> userGotTattooed(@PathVariable("id") Integer id){
+        boolean extracted = questionnaireService.userGotTattooed(id);
+        return new ResponseEntity<>(extracted, HttpStatus.OK);
+    }
+
+    @GetMapping("/hasCold/{id}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<Boolean> userHasCold(@PathVariable("id") Integer id){
+        boolean extracted = questionnaireService.userHasCold(id);
+        return new ResponseEntity<>(extracted, HttpStatus.OK);
+    }
+
+    @GetMapping("/hasMenstruation/{id}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<Boolean> userHAsMenstruation(@PathVariable("id") Integer id){
+        boolean extracted = questionnaireService.userHasMenstruation(id);
+        return new ResponseEntity<>(extracted, HttpStatus.OK);
+    }
+
+    @GetMapping("/takesMedication/{id}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<Boolean> userTakesMedication(@PathVariable("id") Integer id){
+        boolean extracted = questionnaireService.userTakesMedication(id);
+        return new ResponseEntity<>(extracted, HttpStatus.OK);
+    }
 }

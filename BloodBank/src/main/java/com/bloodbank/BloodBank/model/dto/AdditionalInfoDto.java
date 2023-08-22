@@ -1,8 +1,12 @@
 package com.bloodbank.BloodBank.model.dto;
 
 import com.bloodbank.BloodBank.model.enums.BloodType;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class AdditionalInfoDto {
     private int id;
@@ -22,13 +26,12 @@ public class AdditionalInfoDto {
     private String  bagType;
     private String  reasonForRejection;
     private String  reasonForAbort;
-    private LocalTime startTime;
-    private LocalTime  endTime;
+
     private boolean  accepted;
 
-    private ScheduledAppointmentDto scheduledAppointmentDto;
+    private int scheduledAppointmentId;
 
-    public AdditionalInfoDto(int id, int questionaireId, BloodType bloodType, int medicalStaffId, boolean bakarSulfat, boolean normalLevel, boolean highLevel, String hemoglobinometar, String value, boolean lungs, boolean heart, String TA, String TT, String TV, String bagType, String reasonForRejection, String reasonForAbort, LocalTime startTime, LocalTime endTime, boolean accepted, ScheduledAppointmentDto scheduledAppointmentDto) {
+    public AdditionalInfoDto(int id, int questionaireId, BloodType bloodType, int medicalStaffId, boolean bakarSulfat, boolean normalLevel, boolean highLevel, String hemoglobinometar, String value, boolean lungs, boolean heart, String TA, String TT, String TV, String bagType, String reasonForRejection, String reasonForAbort, boolean accepted, int scheduledAppointmentId) {
         this.id = id;
         this.questionaireId = questionaireId;
         this.bloodType = bloodType;
@@ -46,10 +49,8 @@ public class AdditionalInfoDto {
         this.bagType = bagType;
         this.reasonForRejection = reasonForRejection;
         this.reasonForAbort = reasonForAbort;
-        this.startTime = startTime;
-        this.endTime = endTime;
         this.accepted = accepted;
-        this.scheduledAppointmentDto = scheduledAppointmentDto;
+        this.scheduledAppointmentId = scheduledAppointmentId;
     }
 
     public AdditionalInfoDto() {
@@ -191,22 +192,6 @@ public class AdditionalInfoDto {
         this.reasonForAbort = reasonForAbort;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
     public boolean isAccepted() {
         return accepted;
     }
@@ -215,11 +200,11 @@ public class AdditionalInfoDto {
         this.accepted = accepted;
     }
 
-    public ScheduledAppointmentDto getScheduledAppointmentDto() {
-        return scheduledAppointmentDto;
+    public int getScheduledAppointmentId() {
+        return scheduledAppointmentId;
     }
 
-    public void setScheduledAppointmentDto(ScheduledAppointmentDto scheduledAppointmentDto) {
-        this.scheduledAppointmentDto = scheduledAppointmentDto;
+    public void setScheduledAppointmentId(int scheduledAppointmentId) {
+        this.scheduledAppointmentId = scheduledAppointmentId;
     }
 }

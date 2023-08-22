@@ -52,7 +52,7 @@ public class AppointmentController {
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MEDSTAFF')")
     public ResponseEntity<Appointment> createNewAppointment(@RequestBody AppointmentDto appointment) {
         LocalDateTime time = appointment.getStart().plusHours(1);
         appointment.setStart(time);
