@@ -45,4 +45,14 @@ public class BloodCenterGradeService {
 
         return true;
     }
+
+    public BloodCenterGrade findByBloodCenterIdAndUserId(Integer bloodCenterId, Integer userId){
+        BloodCenterGrade g = bloodCenterGradeRepository.getBloodCenterGradeByBloodCenter_IdAndUser_Id(bloodCenterId, userId);
+        return  g;
+    }
+
+    public BloodCenterGrade save(BloodCenterGrade bloodCenterGrade){
+       BloodCenterGrade g = bloodCenterGradeRepository.save(bloodCenterGrade);
+       return g;
+    }
 }

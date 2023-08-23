@@ -5,6 +5,7 @@ insert into address (city, country, number, street ) values ('Kragujevac', 'Srbi
 insert into registred_user (name, surname, jmbg, gender, email, password, address_id, occupation, job_or_school_info, points, category, penalties, phone, enabled, last_password_reset_date, weight) values ('Tamara', 'Krgovic', '123345', 1, 'tamara@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 1, 'student', 'ftn', 0, 0, 0, '06502345', true, '2017-10-01 21:58:58.508-07', 70);
 insert into registred_user (name, surname, jmbg, gender, email, password, address_id, occupation, job_or_school_info, points, category, penalties, phone, enabled, last_password_reset_date,weight) values ('Darko', 'Cokic', '123455', 0, 'darko@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 2, 'student', 'ftn', 0, 0, 0, '06502345', true, '2017-10-01 21:58:58.508-07', 70);
 insert into registred_user (name, surname, jmbg, gender, email, password, address_id, occupation, job_or_school_info, points, category, penalties, phone, enabled, last_password_reset_date, weight) values ('Branka', 'Kljajic', '544545', 1, 'branka@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 2, 'student', 'ftn', 0, 0, 0, '06502345', true, '2017-10-01 21:58:58.508-07', 70);
+insert into registred_user (name, surname, jmbg, gender, email, password, address_id, occupation, job_or_school_info, points, category, penalties, phone, enabled, last_password_reset_date, weight) values ('Sima', 'Krestic', '111111', 0, 'sima@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 2, 'student', 'ftn', 0, 0, 0, '06502345', true, '2017-10-01 21:58:58.508-07', 80);
 
 insert into blood_center (name, address_id, description, average_score) values ('Red cross', 1, 'good', 3);
 insert into blood_center (name, address_id, description, average_score) values ('Blue cross', 2, 'nice', 4);
@@ -19,6 +20,7 @@ INSERT INTO ROLE (name) VALUES ('ROLE_NOTAUTH');
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (1, 1); -- user-u dodeljujemo rolu USER
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (2, 2);
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (3, 3);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (4, 1);
 
 insert into appointment (start, duration, available, blood_center_id, medical_staff_id, version) values ('2023-10-01 21:58:58.508-07', 1, true, 1, 2, 0);
 insert into appointment (start, duration, available, blood_center_id, medical_staff_id, version) values ('2023-10-02 21:58:58.508-07', 1, true, 1, 2, 0);

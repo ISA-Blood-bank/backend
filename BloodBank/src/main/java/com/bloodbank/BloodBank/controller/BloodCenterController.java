@@ -52,6 +52,7 @@ public class BloodCenterController {
 
 
     @GetMapping("/find/{id}")
+    @PreAuthorize("hasRole('USER') || hasRole('MEDSTAFF')")
     public ResponseEntity<BloodCenter> findOne(@PathVariable("id") Integer id){
         BloodCenter bc = bloodCenterSevice.findOne(id);
         return  new ResponseEntity<>(bc, HttpStatus.OK);

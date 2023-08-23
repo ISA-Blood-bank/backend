@@ -31,6 +31,13 @@ public class RegisteredUserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/findIdByEmail/{email}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Integer> getUserIdByEmail(@PathVariable("email") String email){
+        RegistredUser user = regUserService.findByEmail(email);
+        return  new ResponseEntity<>(user.getId(), HttpStatus.OK);
+    }
+
     @GetMapping("/find/{id}")
     public ResponseEntity<RegistredUser> getUserById(@PathVariable("id") Integer id){
         RegistredUser user = regUserService.findOne(id);
