@@ -14,6 +14,6 @@ public interface ScheduledAppointmentRepository extends JpaRepository<ScheduledA
     @Query("select b from ScheduledAppointment b where b.user.id = ?1 and b.canceled = true")
     public List<ScheduledAppointment> findAllByUserIdCanceled(int userId);
 
-    @Query("select b from ScheduledAppointment b where b.canceled = false and b.appointment.bloodCenter.id = ?1")
+    @Query("select b from ScheduledAppointment b where b.canceled = false and b.appointment.bloodCenter.id = ?1 and b.passed=false")
     public List<ScheduledAppointment>findAllNonCanceledAndBloodCenterId(int bloodCenterId);
 }

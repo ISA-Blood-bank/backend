@@ -75,7 +75,9 @@ public class ScheduledAppointmentController {
             return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(scheduledAppointment, HttpStatus.OK);
+        ScheduledAppointment scheduledAppointment1 = scheduledAppointmentService.setPassed(scheduledAppointment);
+
+        return new ResponseEntity<>(scheduledAppointment1, HttpStatus.OK);
     }
 
     @GetMapping(value = "/allScheduledAppointments/{id}")

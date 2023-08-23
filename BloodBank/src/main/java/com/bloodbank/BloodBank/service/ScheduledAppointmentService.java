@@ -106,7 +106,7 @@ public class ScheduledAppointmentService {
     public Visits addVisitsForUser(ScheduledAppointment dto){
         Visits visit = new Visits(
                 dto.getUser(),
-                bloodCenterSevice.findOne(dto.getId())
+                dto.getAppointment().getBloodCenter()
         );
 
         visitsRepository.save(visit);
@@ -180,6 +180,11 @@ public class ScheduledAppointmentService {
         return displayDtos;
     }
 
+    public ScheduledAppointment setPassed(ScheduledAppointment scheduledAppointment){
+        scheduledAppointment.setPassed(true);
+        scheduledAppointment = scheduledAppointmentRepository.save(scheduledAppointment);
 
+        return scheduledAppointment;
+    }
 
 }

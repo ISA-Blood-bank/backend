@@ -49,7 +49,7 @@ public class BloodBankApplicationTests {
 		appointmentService.save(new Appointment(3, LocalDateTime.now().plusDays(16), 1, true, null, null, 0));
 		appointmentService.save(new Appointment(4, LocalDateTime.now().plusDays(17), 1, true, null, null, 0));
 		appointmentService.save(new Appointment(5, LocalDateTime.now().plusDays(18), 1, true, null, null, 0));
-		RegistredUser user = new RegistredUser(1, "Tea", "Teic", "11", Gender.FEMALE, "tea@gmail.com", "123", null, "student", "ftn", 0, Category.REGULAR, 0, "12345");
+		RegistredUser user = new RegistredUser(1, "Tea", "Teic", "11", Gender.FEMALE, "tea@gmail.com", "123", null, "student", "ftn", 0, Category.REGULAR, 0, "12345", 50);
 		registeredUserService.save(user);
 		questionnaireService.save(new Questionnaire(1, true, true, true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true, LocalDateTime.now().minusDays(3), user));
 	}
