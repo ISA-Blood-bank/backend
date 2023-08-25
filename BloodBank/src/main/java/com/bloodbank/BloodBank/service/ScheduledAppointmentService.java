@@ -113,22 +113,6 @@ public class ScheduledAppointmentService {
         return visit;
     }
 
-    public Blood addBloodToCentre( AdditionalInfoDto additionalInfoDto){
-        Integer schId = additionalInfoDto.getScheduledAppointmentId();
-        ScheduledAppointment sch = scheduledAppointmentRepository.findById(schId).orElseGet(null);
-        Appointment appointment = sch.getAppointment();
-        Blood blood = bloodRepository.getBloodByBloodCenterIdAndBloodType(
-                appointment.getBloodCenter().getId(),
-                additionalInfoDto.getBloodType()
-        );
-
-        blood.setQuantity(blood.getQuantity() + 1); //racuna se jedinica krvi
-
-        bloodRepository.save(blood);
-
-        return blood;
-    }
-
     public AdditionalInformation saveAdditionalInfo(AdditionalInfoDto additionalInfoDto){
         AdditionalInformation info =  new AdditionalInformation(
                 additionalInfoDto.getId(),

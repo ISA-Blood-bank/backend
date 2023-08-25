@@ -2,6 +2,8 @@ package com.bloodbank.BloodBank.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
+
 @Entity
 public class Address implements Serializable {
     @Id
@@ -71,5 +73,18 @@ public class Address implements Serializable {
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+        Address address = (Address) o;
+        return getId() == address.getId() && Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getNumber(), address.getNumber()) && Objects.equals(getCity(), address.getCity()) && Objects.equals(getCountry(), address.getCountry());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStreet(), getNumber(), getCity(), getCountry());
     }
 }

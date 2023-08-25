@@ -2,10 +2,7 @@ package com.bloodbank.BloodBank.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "BloodCenter")
@@ -90,4 +87,16 @@ public class BloodCenter implements Serializable {
     public BloodCenter() {
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BloodCenter)) return false;
+        BloodCenter that = (BloodCenter) o;
+        return getId() == that.getId() && Float.compare(that.getAverageScore(), getAverageScore()) == 0 && Objects.equals(getName(), that.getName()) && Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getDescription(), that.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getAddress(), getDescription(), getAverageScore());
+    }
 }

@@ -4,6 +4,7 @@ import com.bloodbank.BloodBank.model.enums.Gender;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class MedicalStaff implements Serializable {
@@ -124,5 +125,18 @@ public class MedicalStaff implements Serializable {
                 ", address=" + address +
                 ", bloodCenter=" + bloodCenter +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MedicalStaff)) return false;
+        MedicalStaff that = (MedicalStaff) o;
+        return getId() == that.getId() && Objects.equals(getName(), that.getName()) && Objects.equals(getSurname(), that.getSurname()) && Objects.equals(getJmbg(), that.getJmbg()) && getGender() == that.getGender() && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getPassword(), that.getPassword()) && Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getBloodCenter(), that.getBloodCenter());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getSurname(), getJmbg(), getGender(), getEmail(), getPassword(), getAddress(), getBloodCenter());
     }
 }

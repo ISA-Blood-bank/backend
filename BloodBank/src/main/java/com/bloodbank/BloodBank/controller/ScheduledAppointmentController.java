@@ -4,6 +4,7 @@ import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.AdditionalInfoDto;
 import com.bloodbank.BloodBank.model.dto.ScheduledAppointmentDto;
 import com.bloodbank.BloodBank.model.dto.ScheduledDisplayDto;
+import com.bloodbank.BloodBank.service.BloodService;
 import com.bloodbank.BloodBank.service.QuestionnaireService;
 import com.bloodbank.BloodBank.service.ScheduledAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class ScheduledAppointmentController {
 
     @Autowired
     private QuestionnaireService questionnaireService;
+
+    @Autowired
+    private BloodService bloodService;
 
     @GetMapping("/getAllForLoggedUser")
     @PreAuthorize("hasRole('USER')")
@@ -70,7 +74,7 @@ public class ScheduledAppointmentController {
             return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Blood blood = scheduledAppointmentService.addBloodToCentre(dto);
+        Blood blood = bloodService.addBloodToCentre(dto);
         if(blood == null){
             return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -111,6 +115,7 @@ public class ScheduledAppointmentController {
                 appointment.getAppointment().getDuration(),
                 appointment.getUser().getId()
         );
+
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }

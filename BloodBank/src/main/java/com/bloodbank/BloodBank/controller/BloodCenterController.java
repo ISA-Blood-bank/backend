@@ -32,7 +32,7 @@ public class BloodCenterController {
         this.bloodCenterSevice = bloodCenterSevice;
     }
     @GetMapping(value = "/all")
-    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') || hasRole('ADMIN') || hasRole('NOTAUTH')")
     public ResponseEntity<List<BloodCenter>> findAll(){
 
         List<BloodCenter> bloodCenters = bloodCenterSevice.findAll();

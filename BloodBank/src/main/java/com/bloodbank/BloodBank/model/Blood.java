@@ -57,4 +57,14 @@ public class Blood implements Serializable {
     public void setBloodCenter(BloodCenter bloodCenter) {
         this.bloodCenter = bloodCenter;
     }
+
+    @Override
+    public String toString() {
+        return "Blood{" +
+                "id=" + id +
+                ", type=" + type +
+                ", quantity=" + quantity +
+                ", bloodCenter=" + bloodCenter +
+                '}';
+    }
 }

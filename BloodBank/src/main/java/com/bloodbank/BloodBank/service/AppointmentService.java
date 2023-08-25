@@ -1,5 +1,6 @@
 package com.bloodbank.BloodBank.service;
 
+import com.bloodbank.BloodBank.exceptions.SameMedicalStaffException;
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.AppointmentDto;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
@@ -122,8 +123,12 @@ public class AppointmentService {
         return appointmentRepository.findAllSortedAndAvailable(pageable);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Appointment save(Appointment appointment) {
+        if(isOverlapingAnMedicalStaff(appointment)){
+            throw new SameMedicalStaffException("Same medical staff cannot be in two or more overlapping appointments at the same time!");
+        }
+
         return appointmentRepository.save(appointment);
 
     }
@@ -156,6 +161,63 @@ public class AppointmentService {
             }
         }
         return true;
+    }
+
+    public boolean isOverLaping(Appointment appointment) {
+        List<Appointment> appointments = appointmentRepository.findByBloodCenter_Id(appointment.getBloodCenter().getId());
+
+        LocalDateTime newAppointmentStart = appointment.getStart();
+        LocalDateTime newAppointmentEnd = newAppointmentStart.plusHours((long) appointment.getDuration());
+
+        for (Appointment existingAppointment : appointments) {
+            LocalDateTime existingAppointmentStart = existingAppointment.getStart();
+            LocalDateTime existingAppointmentEnd = existingAppointmentStart.plusHours((long) existingAppointment.getDuration());
+
+            if (newAppointmentStart.isEqual(existingAppointmentStart) || (newAppointmentStart.isAfter(existingAppointmentStart) && newAppointmentStart.isBefore(existingAppointmentEnd))
+                    || (newAppointmentEnd.isAfter(existingAppointmentStart) && newAppointmentEnd.isBefore(existingAppointmentEnd))) {
+                return true; // Overlapping appointment found
+            }
+        }
+
+        return false; // No overlapping appointment found
+    }
+
+    public List<Appointment> getOverlappingAppointments(Appointment appointment){
+        List<Appointment> appointments = appointmentRepository.findByBloodCenter_Id(appointment.getBloodCenter().getId());
+        List<Appointment> overlaping = new ArrayList<>();
+
+        LocalDateTime newAppointmentStart = appointment.getStart();
+        LocalDateTime newAppointmentEnd = newAppointmentStart.plusHours((long) appointment.getDuration());
+
+        for (Appointment existingAppointment : appointments) {
+            LocalDateTime existingAppointmentStart = existingAppointment.getStart();
+            LocalDateTime existingAppointmentEnd = existingAppointmentStart.plusHours((long) existingAppointment.getDuration());
+
+            if (newAppointmentStart.isEqual(existingAppointmentStart) || (newAppointmentStart.isAfter(existingAppointmentStart) && newAppointmentStart.isBefore(existingAppointmentEnd))
+                    || (newAppointmentEnd.isAfter(existingAppointmentStart) && newAppointmentEnd.isBefore(existingAppointmentEnd))) {
+                overlaping.add(existingAppointment);
+            }
+        }
+
+        return overlaping;
+    }
+
+    public boolean isOverlapingAnMedicalStaff(Appointment appointment){
+        List<Appointment> overlapping = getOverlappingAppointments(appointment);
+        MedicalStaff msToAdd = appointment.getMedicalStaff();
+
+        if(overlapping.isEmpty()){
+            return false;
+        }
+
+        for(Appointment existing: overlapping){
+            MedicalStaff m = existing.getMedicalStaff();
+            if (m.equals(msToAdd)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
