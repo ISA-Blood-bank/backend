@@ -2,10 +2,13 @@ package com.bloodbank.BloodBank.controller;
 
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.AdditionalInfoDto;
+import com.bloodbank.BloodBank.model.dto.RejectionReasonDto;
 import com.bloodbank.BloodBank.model.dto.ScheduledAppointmentDto;
 import com.bloodbank.BloodBank.model.dto.ScheduledDisplayDto;
+import com.bloodbank.BloodBank.repository.ScheduledAppointmentRepository;
 import com.bloodbank.BloodBank.service.BloodService;
 import com.bloodbank.BloodBank.service.QuestionnaireService;
+import com.bloodbank.BloodBank.service.RejectionReasonService;
 import com.bloodbank.BloodBank.service.ScheduledAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,12 @@ public class ScheduledAppointmentController {
     @Autowired
     private BloodService bloodService;
 
+    @Autowired
+    ScheduledAppointmentRepository scheduledAppointmentRepository;
+
+    @Autowired
+    private RejectionReasonService rejectionReasonService;
+
     @GetMapping("/getAllForLoggedUser")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<ScheduledAppointment>> findAllForLoggedUser(){
@@ -52,6 +61,10 @@ public class ScheduledAppointmentController {
     @PreAuthorize("hasRole('MEDSTAFF')")
     public ResponseEntity<ScheduledAppointment> patientNotCome(@RequestBody ScheduledAppointmentDto dto){
         ScheduledAppointment appointment = scheduledAppointmentService.patientNotCome(dto);
+        appointment.setPassed(true);
+        appointment.setCanceled(true);
+
+        appointment = scheduledAppointmentRepository.save(appointment);
         if(appointment == null){
             return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -98,22 +111,23 @@ public class ScheduledAppointmentController {
     @GetMapping(value = "/getScheduledAppointment/{id}")
     @PreAuthorize("hasRole('MEDSTAFF')")
     public ResponseEntity<ScheduledDisplayDto> getById(@PathVariable("id") Integer id){
-        ScheduledAppointment appointment = scheduledAppointmentService.findById(id);
+        ScheduledAppointment s = scheduledAppointmentService.findById(id);
 
-        if(appointment == null){
+        if(s == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         ScheduledDisplayDto dto = new ScheduledDisplayDto(
-                appointment.getId(),
-                appointment.getUser().getName(),
-                appointment.getUser().getSurname(),
-                appointment.getUser().getEmail(),
-                appointment.getAppointment().getStart(),
-                appointment.isPassed(),
-                appointment.isCanceled(),
-                appointment.getAppointment().getDuration(),
-                appointment.getUser().getId()
+                s.getId(),
+                s.getUser().getName(),
+                s.getUser().getSurname(),
+                s.getUser().getEmail(),
+                s.getAppointment().getStart(),
+                s.getAppointment().getDuration(),
+                s.isCanceled(),
+                s.isPassed(),
+                s.getUser().getId(),
+                s.getAppointment().getId()
         );
 
 
@@ -129,6 +143,25 @@ public class ScheduledAppointmentController {
         }
 
         return new ResponseEntity<>(qId, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/rejectPatient")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<RejectionInfo> rejectPatient(@RequestBody RejectionReasonDto dto){
+        ScheduledAppointment sc = scheduledAppointmentService.findById(dto.getScheduledAppointmentId());
+        if(sc == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        sc.setPassed(true);
+        scheduledAppointmentRepository.save(sc);
+
+        RejectionInfo rejectionInfo = rejectionReasonService.save(dto);
+        if (rejectionInfo == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(rejectionInfo, HttpStatus.CREATED);
+
     }
 }
 

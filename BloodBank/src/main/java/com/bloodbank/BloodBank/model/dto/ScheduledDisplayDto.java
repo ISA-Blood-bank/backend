@@ -15,6 +15,8 @@ public class ScheduledDisplayDto {
 
     private int userId;
 
+    private int appointmentId;
+
 
     public ScheduledDisplayDto() {
     }
@@ -29,6 +31,19 @@ public class ScheduledDisplayDto {
         this.canceled = canceled;
         this.duration = duration;
         this.userId = userId;
+    }
+
+    public ScheduledDisplayDto(int id, String name, String surname, String email, LocalDateTime start, float duration, boolean passed, boolean canceled, int userId, int appointmentId) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.start = start;
+        this.duration = duration;
+        this.passed = passed;
+        this.canceled = canceled;
+        this.userId = userId;
+        this.appointmentId = appointmentId;
     }
 
     public int getId() {
@@ -101,5 +116,13 @@ public class ScheduledDisplayDto {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(int appointmentId) {
+        this.appointmentId = appointmentId;
     }
 }

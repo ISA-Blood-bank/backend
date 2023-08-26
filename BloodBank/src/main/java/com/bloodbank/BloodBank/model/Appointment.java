@@ -3,6 +3,7 @@ package com.bloodbank.BloodBank.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Appointment")
@@ -98,5 +99,18 @@ public class Appointment implements Serializable{
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Appointment)) return false;
+        Appointment that = (Appointment) o;
+        return getId() == that.getId() && Float.compare(that.getDuration(), getDuration()) == 0 && isAvailable() == that.isAvailable() && Objects.equals(getStart(), that.getStart()) && Objects.equals(getBloodCenter(), that.getBloodCenter()) && Objects.equals(getMedicalStaff(), that.getMedicalStaff()) && Objects.equals(getVersion(), that.getVersion());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStart(), getDuration(), isAvailable(), getBloodCenter(), getMedicalStaff(), getVersion());
     }
 }

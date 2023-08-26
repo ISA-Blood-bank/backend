@@ -2,6 +2,7 @@ package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.*;
 import com.bloodbank.BloodBank.model.dto.AdditionalInfoDto;
+import com.bloodbank.BloodBank.model.dto.RejectionReasonDto;
 import com.bloodbank.BloodBank.model.dto.ScheduledAppointmentDto;
 import com.bloodbank.BloodBank.model.dto.ScheduledDisplayDto;
 import com.bloodbank.BloodBank.repository.*;
@@ -45,6 +46,8 @@ public class ScheduledAppointmentService {
 
     @Autowired
     private  AppointmentService appointmentService;
+
+
     public List<ScheduledAppointment> findAllByUserId(){
         TokenBasedAuthentication authentication = (TokenBasedAuthentication) SecurityContextHolder.getContext().getAuthentication();
         RegistredUser user = (RegistredUser) authentication.getPrincipal();
@@ -89,12 +92,12 @@ public class ScheduledAppointmentService {
     }
 
     public ScheduledAppointment patientNotCome(ScheduledAppointmentDto scheduledAppointmentDto){
-        registeredUserService.givePenalty(scheduledAppointmentDto.getRegistredUesrId());
+        registeredUserService.givePenalty(scheduledAppointmentDto.getRegistredUserId());
         Appointment appointment = appointmentRepository.findById(scheduledAppointmentDto.getAppointmentId()).orElseGet(null);
         ScheduledAppointment sch = new ScheduledAppointment(
                 scheduledAppointmentDto.getId(),
                 appointment,
-                registeredUserService.findOne(scheduledAppointmentDto.getRegistredUesrId()),
+                registeredUserService.findOne(scheduledAppointmentDto.getRegistredUserId()),
                 scheduledAppointmentDto.isPassed(),
                 scheduledAppointmentDto.isCanceled()
         );
@@ -154,10 +157,11 @@ public class ScheduledAppointmentService {
                     s.getUser().getSurname(),
                     s.getUser().getEmail(),
                     s.getAppointment().getStart(),
-                    s.isPassed(),
-                    s.isCanceled(),
                     s.getAppointment().getDuration(),
-                    s.getUser().getId()
+                    s.isCanceled(),
+                    s.isPassed(),
+                    s.getUser().getId(),
+                    s.getAppointment().getId()
             ));
         }
 
@@ -170,5 +174,7 @@ public class ScheduledAppointmentService {
 
         return scheduledAppointment;
     }
+
+
 
 }

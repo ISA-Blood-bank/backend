@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class RegistredUser implements UserDetails {
@@ -258,5 +259,16 @@ public class RegistredUser implements UserDetails {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RegistredUser)) return false;
+        RegistredUser that = (RegistredUser) o;
+        return getId() == that.getId() && Float.compare(that.getPoints(), getPoints()) == 0 && getPenalties() == that.getPenalties() && isEnabled() == that.isEnabled() && Float.compare(that.getWeight(), getWeight()) == 0 && Objects.equals(getName(), that.getName()) && Objects.equals(getSurname(), that.getSurname()) && Objects.equals(getJmbg(), that.getJmbg()) && getGender() == that.getGender() && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getPassword(), that.getPassword()) && Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getOccupation(), that.getOccupation()) && Objects.equals(getJobOrSchoolInfo(), that.getJobOrSchoolInfo()) && getCategory() == that.getCategory() && Objects.equals(getPhone(), that.getPhone()) && Objects.equals(getLastPasswordResetDate(), that.getLastPasswordResetDate()) && Objects.equals(getRoles(), that.getRoles());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getSurname(), getJmbg(), getGender(), getEmail(), getPassword(), getAddress(), getOccupation(), getJobOrSchoolInfo(), getPoints(), getCategory(), getPenalties(), getPhone(), isEnabled(), getLastPasswordResetDate(), getWeight(), getRoles());
+    }
 }

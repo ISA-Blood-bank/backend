@@ -3,7 +3,7 @@ package com.bloodbank.BloodBank.model.dto;
 public class ScheduledAppointmentDto {
     private int id;
     private int appointmentId;
-    private int registredUesrId;
+    private int registredUserId;
     private boolean passed;
     private boolean canceled;
 
@@ -23,12 +23,12 @@ public class ScheduledAppointmentDto {
         this.appointmentId = appointmentId;
     }
 
-    public int getRegistredUesrId() {
-        return registredUesrId;
+    public int getRegistredUserId() {
+        return registredUserId;
     }
 
-    public void setRegistredUesrId(int registredUesrId) {
-        this.registredUesrId = registredUesrId;
+    public void setRegistredUserId(int registredUesrId) {
+        this.registredUserId = registredUesrId;
     }
 
     public boolean isPassed() {
@@ -53,7 +53,7 @@ public class ScheduledAppointmentDto {
     public ScheduledAppointmentDto(int id, int appointmentId, int registredUesrId, boolean passed, boolean canceled) {
         this.id = id;
         this.appointmentId = appointmentId;
-        this.registredUesrId = registredUesrId;
+        this.registredUserId = registredUesrId;
         this.passed = passed;
         this.canceled = canceled;
     }
