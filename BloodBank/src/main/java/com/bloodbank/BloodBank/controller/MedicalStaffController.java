@@ -2,10 +2,12 @@ package com.bloodbank.BloodBank.controller;
 
 import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.RegistredUser;
+import com.bloodbank.BloodBank.model.dto.MedicalStaffDto;
 import com.bloodbank.BloodBank.service.MedicalStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +32,9 @@ public class MedicalStaffController {
     }
 
     @GetMapping("/all-medical-staff/{bloodCenterId}")
-    public ResponseEntity<List<MedicalStaff>> findAll(@PathVariable("bloodCenterId") Integer bloodCenterId){
-        List<MedicalStaff> meds = medicalStaffService.findAllByBloodCenterId(bloodCenterId);
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<List<MedicalStaffDto>> findAll(@PathVariable("bloodCenterId") Integer bloodCenterId){
+        List<MedicalStaffDto> meds = medicalStaffService.findAllByBloodCenterId(bloodCenterId);
         return  new ResponseEntity<>(meds, HttpStatus.OK);
     }
 

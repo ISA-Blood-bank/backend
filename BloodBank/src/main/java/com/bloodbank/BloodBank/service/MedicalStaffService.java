@@ -2,12 +2,14 @@ package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.Address;
 import com.bloodbank.BloodBank.model.MedicalStaff;
+import com.bloodbank.BloodBank.model.dto.MedicalStaffDto;
 import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.BloodCenterRepository;
 import com.bloodbank.BloodBank.repository.MedicalStaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -103,7 +105,23 @@ public class MedicalStaffService {
         return  medialStaffRepository.save(ms);
     }
 
-    public List<MedicalStaff> findAllByBloodCenterId(Integer id){
-        return  medialStaffRepository.findAllByBloodCenterId(id);
+    public List<MedicalStaffDto> findAllByBloodCenterId(Integer id){
+        List<MedicalStaff> medicalStaffs = medialStaffRepository.findAllByBloodCenterId(id);
+        List<MedicalStaffDto> dtoList = new ArrayList<>();
+
+        for(MedicalStaff m: medicalStaffs){
+            dtoList.add(new MedicalStaffDto(
+                    m.getId(),
+                    m.getName(),
+                    m.getSurname(),
+                    m.getJmbg(),
+                    m.getGender(),
+                    m.getEmail(),
+                    m.getAddress().getId(),
+                    m.getBloodCenter().getId()
+            ));
+        }
+
+        return dtoList;
     }
 }

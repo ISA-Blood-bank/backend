@@ -11,38 +11,21 @@ public class MedicalStaffDto {
     private String jmbg;
     private Gender gender;
     private String email;
-    private String password1;
-    private String password2;
-    private Address address;
-    private BloodCenter bloodCenter;
+    private int addressId;
+    private int bloodCenterId;
 
-    public MedicalStaffDto(int id, String name, String surname, String jmbg, Gender gender, String email, String password1, String password2, Address address, BloodCenter bloodCenter) {
+    public MedicalStaffDto() {
+    }
+
+    public MedicalStaffDto(int id, String name, String surname, String jmbg, Gender gender, String email, int addressId, int bloodCenterId) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.jmbg = jmbg;
         this.gender = gender;
         this.email = email;
-        this.password1 = password1;
-        this.password2 = password2;
-        this.address = address;
-        this.bloodCenter = bloodCenter;
-    }
-
-    @Override
-    public String toString() {
-        return "MedicalStaffDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", jmbg='" + jmbg + '\'' +
-                ", gender=" + gender +
-                ", email='" + email + '\'' +
-                ", password1='" + password1 + '\'' +
-                ", password2='" + password2 + '\'' +
-                ", address=" + address +
-                ", bloodCenter=" + bloodCenter +
-                '}';
+        this.addressId = addressId;
+        this.bloodCenterId = bloodCenterId;
     }
 
     public int getId() {
@@ -93,35 +76,19 @@ public class MedicalStaffDto {
         this.email = email;
     }
 
-    public String getPassword1() {
-        return password1;
+    public int getAddressId() {
+        return addressId;
     }
 
-    public void setPassword1(String password1) {
-        this.password1 = password1;
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
     }
 
-    public String getPassword2() {
-        return password2;
+    public int getBloodCenterId() {
+        return bloodCenterId;
     }
 
-    public void setPassword2(String password2) {
-        this.password2 = password2;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public BloodCenter getBloodCenter() {
-        return bloodCenter;
-    }
-
-    public void setBloodCenter(BloodCenter bloodCenter) {
-        this.bloodCenter = bloodCenter;
+    public void setBloodCenterId(int bloodCenterId) {
+        this.bloodCenterId = bloodCenterId;
     }
 }
