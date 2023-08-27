@@ -53,4 +53,26 @@ public class MedicalStaffController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/myProfile/{id}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<MedicalStaffDto> getMyProfile(@PathVariable("id") Integer id){
+        MedicalStaff ms = medicalStaffService.findById(id);
+        if(ms == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        MedicalStaffDto dto = new MedicalStaffDto(
+                ms.getId(),
+                ms.getName(),
+                ms.getSurname(),
+                ms.getJmbg(),
+                ms.getGender(),
+                ms.getEmail(),
+                ms.getAddress().getId(),
+                ms.getBloodCenter().getId()
+        );
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
 }
