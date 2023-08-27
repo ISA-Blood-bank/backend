@@ -5,6 +5,7 @@ import com.bloodbank.BloodBank.model.BloodCenter;
 import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.BloodCenterDto;
+import com.bloodbank.BloodBank.model.dto.BloodCenterViewDto;
 import com.bloodbank.BloodBank.model.dto.RecommendDto;
 import com.bloodbank.BloodBank.service.BloodCenterSevice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,28 @@ public class BloodCenterController {
         recommendDto.setStart(time);
         List<BloodCenter> available = bloodCenterSevice.getAvailableBloodCenters(recommendDto);
         return new ResponseEntity<>(available, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/findOne/{id}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<BloodCenterViewDto> getOneForMedStaff(@PathVariable("id") Integer id){
+        BloodCenter bc = bloodCenterSevice.findOne(id);
+        if(bc == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        BloodCenterViewDto dto = new BloodCenterViewDto(
+                bc.getId(),
+                bc.getName(),
+                bc.getAddress().getStreet(),
+                bc.getAddress().getNumber(),
+                bc.getAddress().getCountry(),
+                bc.getAddress().getCity(),
+                bc.getDescription(),
+                bc.getAverageScore()
+        );
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
 }
