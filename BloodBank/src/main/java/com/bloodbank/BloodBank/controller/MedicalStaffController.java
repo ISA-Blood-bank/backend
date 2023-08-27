@@ -3,6 +3,7 @@ package com.bloodbank.BloodBank.controller;
 import com.bloodbank.BloodBank.model.MedicalStaff;
 import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.MedicalStaffDto;
+import com.bloodbank.BloodBank.model.dto.RegistredUserViewDto;
 import com.bloodbank.BloodBank.service.MedicalStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,14 @@ public class MedicalStaffController {
     public ResponseEntity<MedicalStaff> updateMedicalStaff(@RequestBody MedicalStaff ms){
         MedicalStaff newMedicalStaff = medicalStaffService.updateMedicalStaff(ms);
         return new ResponseEntity<>(newMedicalStaff, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/allVisited/{bloodCenterId}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<List<RegistredUserViewDto>> getUserWhoVisited(@PathVariable("bloodCenterId") Integer bloodCenterId){
+        List<RegistredUserViewDto> users = medicalStaffService.getUserWhoVisitedBloodCenter(bloodCenterId);
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 }

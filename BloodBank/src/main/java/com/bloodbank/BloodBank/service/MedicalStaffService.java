@@ -2,10 +2,14 @@ package com.bloodbank.BloodBank.service;
 
 import com.bloodbank.BloodBank.model.Address;
 import com.bloodbank.BloodBank.model.MedicalStaff;
+import com.bloodbank.BloodBank.model.RegistredUser;
 import com.bloodbank.BloodBank.model.dto.MedicalStaffDto;
+import com.bloodbank.BloodBank.model.dto.RegistredUserDto;
+import com.bloodbank.BloodBank.model.dto.RegistredUserViewDto;
 import com.bloodbank.BloodBank.repository.AddressRepository;
 import com.bloodbank.BloodBank.repository.BloodCenterRepository;
 import com.bloodbank.BloodBank.repository.MedicalStaffRepository;
+import com.bloodbank.BloodBank.repository.VisitsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,10 @@ public class MedicalStaffService {
     private AddressRepository addressRepository;
     @Autowired
     private BloodCenterRepository bloodCenterRepository;
+
+    @Autowired
+    private VisitsRepository visitsRepository;
+
     Address identical= new Address();
     MedicalStaff identicalMs= new MedicalStaff();
     private boolean exists(MedicalStaff ms){
@@ -119,6 +127,30 @@ public class MedicalStaffService {
                     m.getEmail(),
                     m.getAddress().getId(),
                     m.getBloodCenter().getId()
+            ));
+        }
+
+        return dtoList;
+    }
+
+    public List<RegistredUserViewDto> getUserWhoVisitedBloodCenter(Integer bloodCenterId){
+        List<RegistredUser> users = visitsRepository.getUsersWhoVisitByBloodCenterId(bloodCenterId);
+        List<RegistredUserViewDto> dtoList = new ArrayList<>();
+        for(RegistredUser u: users){
+            dtoList.add( new RegistredUserViewDto(
+                    u.getId(),
+                    u.getName(),
+                    u.getSurname(),
+                    u.getJmbg(),
+                    u.getGender(),
+                    u.getEmail(),
+                    u.getOccupation(),
+                    u.getJobOrSchoolInfo(),
+                    u.getPoints(),
+                    u.getCategory(),
+                    u.getPenalties(),
+                    u.getWeight(),
+                    u.getPhone()
             ));
         }
 
