@@ -220,4 +220,20 @@ public class AppointmentService {
         return false;
     }
 
+    public List<AppointmentDto> getAllByBloodCenterId(Integer bloodCenterId) {
+        List<Appointment> appointments = appointmentRepository.getAppointmentsByBloodCenter_IdAndAndAvailable(bloodCenterId);
+        List<AppointmentDto> dtoList = new ArrayList<>();
+
+        for(Appointment a: appointments){
+            dtoList.add(new AppointmentDto(
+                    a.getId(),
+                    a.getDuration(),
+                    a.getStart(),
+                    a.getMedicalStaff().getId()
+            ));
+        }
+
+        return dtoList;
+    }
+
 }

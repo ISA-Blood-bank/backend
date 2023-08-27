@@ -10,6 +10,13 @@ public class AppointmentDto {
     public AppointmentDto() {
     }
 
+    public AppointmentDto(int id, float duration, LocalDateTime start, int medicalStaffId) {
+        this.id = id;
+        this.duration = duration;
+        this.start = start;
+        this.medicalStaffId = medicalStaffId;
+    }
+
     public int getId() {
         return id;
     }

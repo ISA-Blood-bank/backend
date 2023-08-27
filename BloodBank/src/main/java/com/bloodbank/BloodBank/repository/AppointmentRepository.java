@@ -20,4 +20,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("select b from Appointment  b where b.bloodCenter.id = ?1")
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     public List<Appointment> findByBloodCenter_Id(Integer bloodCenterId);
+
+    @Query("select b from Appointment  b where b.bloodCenter.id = ?1 and b.available=true")
+    public List<Appointment> getAppointmentsByBloodCenter_IdAndAndAvailable(Integer bloodCenterId);
 }

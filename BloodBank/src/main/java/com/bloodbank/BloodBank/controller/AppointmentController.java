@@ -67,4 +67,15 @@ public class AppointmentController {
         List<Appointment> available = appointmentService.getAvailableAppointments(recommendDto);
         return new ResponseEntity<>(available, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/allByBloodCenter/{bloodCenterId}")
+    @PreAuthorize("hasRole('MEDSTAFF')")
+    public ResponseEntity<List<AppointmentDto>> getByBloodCenterId(@PathVariable("bloodCenterId") Integer bloodCenterId){
+        List<AppointmentDto> dtoList = appointmentService.getAllByBloodCenterId(bloodCenterId);
+        if(dtoList == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
 }
